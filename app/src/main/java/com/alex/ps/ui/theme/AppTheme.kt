@@ -1,20 +1,20 @@
 package com.alex.ps.ui.theme
 
-import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.material3.ripple
+import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Shapes
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
+import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-// https://www.youtube.com/watch?v=eTVVT9cX4Bw
-
-private val darkColorScheme = AppColorScheme(
+private val darkColorScheme = darkColorScheme(
     background = BlackHole90,
     onBackground = WhiteCold100,
     primary = GreenBlue,
@@ -23,7 +23,7 @@ private val darkColorScheme = AppColorScheme(
     onSecondary = WhiteCold100,
 )
 
-private val lightColorScheme = AppColorScheme(
+private val lightColorScheme = lightColorScheme(
     background = WhiteCold100,
     onBackground = BlackHole90,
     primary = GreenBlue,
@@ -32,18 +32,18 @@ private val lightColorScheme = AppColorScheme(
     onSecondary = WhiteCold100
 )
 
-private val typography = AppTypography(
+private val typography = Typography(
     titleLarge = TextStyle(
         fontFamily = Inter,
         fontWeight = FontWeight.Bold,
         fontSize = 24.sp
     ),
-    titleNormal = TextStyle(
+    titleMedium = TextStyle(
         fontFamily = Inter,
         fontWeight = FontWeight.Bold,
         fontSize = 20.sp
     ),
-    body = TextStyle(
+    bodyMedium = TextStyle(
         fontFamily = Inter,
         fontSize = 16.sp
     ),
@@ -53,16 +53,9 @@ private val typography = AppTypography(
     )
 )
 
-private val shape = AppShape(
-    container = RoundedCornerShape(16.dp),
-    button = RoundedCornerShape(50)
-)
-
-private val size = AppSize(
-    large = 24.dp,
-    medium = 16.dp,
-    normal = 12.dp,
-    small = 8.dp
+private val shapes = Shapes(
+    large = RoundedCornerShape(16.dp),
+    medium = RoundedCornerShape(50)
 )
 
 @Composable
@@ -71,13 +64,22 @@ fun AppTheme(
     content: @Composable () -> Unit
 ) {
     val colorScheme = if (isDarkTheme) darkColorScheme else lightColorScheme
-    val rippleIndication = rememberRipple()
-    CompositionLocalProvider(
-        LocalAppColorScheme provides colorScheme,
-        LocalAppTypography provides typography,
-        LocalAppShape provides shape,
-        LocalAppSize provides size,
-        LocalIndication provides rippleIndication,
+
+    MaterialTheme(
+        colorScheme = colorScheme,
+        typography = typography,
+        shapes = shapes,
         content = content
     )
+}
+
+object AppTheme {
+    val colorScheme: ColorScheme
+        @Composable get() = MaterialTheme.colorScheme
+
+    val typography: Typography
+        @Composable get() = MaterialTheme.typography
+
+    val shape: Shapes
+        @Composable get() = MaterialTheme.shapes
 }
