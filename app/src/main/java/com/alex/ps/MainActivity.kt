@@ -4,12 +4,16 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -83,7 +87,7 @@ class MainActivity : ComponentActivity() {
                                 horizontal = 58.dp
                             ),
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(17.dp)
+                        verticalArrangement = Arrangement.spacedBy(27.dp)
                     ) {
                         TimerWidget(
                             radius = 96.dp,
@@ -91,7 +95,7 @@ class MainActivity : ComponentActivity() {
                             time = "1:54",
                             date = "02.02.2026",
                             total = 1000F,
-                            remaining = 750F
+                            remaining = 300F
                         )
                         FlowRow(
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -107,6 +111,21 @@ class MainActivity : ComponentActivity() {
                         ElectricityAvailableWidget(
                             periods = periods
                         )
+                        Button(
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = AppTheme.shape.medium,
+                            contentPadding = PaddingValues(
+                                horizontal = 0.dp,
+                                vertical = 6.dp
+                            ),
+                            onClick = {}
+                        ) {
+                            Text(
+                                text = "Tomorrow Schedule",
+                                style = AppTheme.typography.labelMedium,
+                                color = AppTheme.colorScheme.onPrimary
+                            )
+                        }
                     }
                 }
             }

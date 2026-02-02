@@ -13,6 +13,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.alex.ps.ui.theme.AppTheme
 
@@ -51,10 +53,20 @@ fun ElectricityAvailableWidget(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     val backgroundColor =
-                        if (period.state == TimePeriodPresentationState.ACTIVE)
-                            AppTheme.colorScheme.primary
-                        else
-                            AppTheme.colorScheme.surface
+                        when (period.state) {
+                            TimePeriodPresentationState.ACTIVE -> AppTheme.colorScheme.primary
+                            TimePeriodPresentationState.SOON -> AppTheme.colorScheme.surface
+                            TimePeriodPresentationState.PAST -> AppTheme.colorScheme.surface
+                                .copy(alpha = .5F)
+                        }
+
+                    val textColor =
+                        when (period.state) {
+                            TimePeriodPresentationState.ACTIVE -> AppTheme.colorScheme.onPrimary
+                            TimePeriodPresentationState.SOON -> AppTheme.colorScheme.onBackground
+                            TimePeriodPresentationState.PAST -> AppTheme.colorScheme.onBackground
+                                .copy(alpha = .5F)
+                        }
 
                     Row(
                         modifier = Modifier
@@ -71,15 +83,19 @@ fun ElectricityAvailableWidget(
                     ) {
                         Text(
                             text = period.start,
-                            style = AppTheme.typography.labelMedium
+                            style = AppTheme.typography.labelMedium,
+                            color = textColor
                         )
                         Text(
                             text = period.duration,
-                            style = AppTheme.typography.labelMedium
+                            style = AppTheme.typography.labelMedium,
+                            fontStyle = FontStyle.Italic,
+                            color = textColor
                         )
                         Text(
                             text = period.end,
-                            style = AppTheme.typography.labelMedium
+                            style = AppTheme.typography.labelMedium,
+                            color = textColor
                         )
                     }
                 }
