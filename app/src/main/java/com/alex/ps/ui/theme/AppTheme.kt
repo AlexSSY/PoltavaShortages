@@ -21,6 +21,10 @@ private val darkColorScheme = darkColorScheme(
     onPrimary = WhiteCold100,
     secondary = BlueDark,
     onSecondary = WhiteCold100,
+    error = RedVirgin,
+    onError = WhiteCold100,
+    surface = BlackHole50,
+    onSurface = WhiteCold100
 )
 
 private val lightColorScheme = lightColorScheme(
@@ -51,6 +55,11 @@ private val typography = Typography(
     bodyMedium = TextStyle(
         fontFamily = Inter,
         fontSize = 13.4.sp // 16px
+    ),
+    labelMedium = TextStyle(
+        fontFamily = Inter,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 11.72.sp // 14px
     ),
     labelSmall = TextStyle(
         fontFamily = Inter,

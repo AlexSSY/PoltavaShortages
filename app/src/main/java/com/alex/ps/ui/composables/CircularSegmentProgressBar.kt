@@ -36,7 +36,7 @@ fun CircularSegmentProgressBar(
     segments: Int = 32,
     gap: Dp = 2.dp
 ) {
-    Canvas(modifier = modifier.size(radius * 2)) {
+    Canvas(modifier = modifier.size((radius + width / 2) * 2)) {
 
         val center = Offset(size.width / 2, size.height / 2)
 
