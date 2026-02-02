@@ -35,21 +35,27 @@ private val lightColorScheme = lightColorScheme(
 private val typography = Typography(
     titleLarge = TextStyle(
         fontFamily = Inter,
-        fontWeight = FontWeight.Bold,
-        fontSize = 24.sp
+        fontWeight = FontWeight.Normal,
+        fontSize = 30.15.sp // 36px
     ),
     titleMedium = TextStyle(
         fontFamily = Inter,
         fontWeight = FontWeight.Bold,
-        fontSize = 20.sp
+        fontSize = 16.75.sp // 20px
+    ),
+    titleSmall = TextStyle(
+        fontFamily = Inter,
+        fontWeight = FontWeight.Bold,
+        fontSize = 15.1.sp // 18px
     ),
     bodyMedium = TextStyle(
         fontFamily = Inter,
-        fontSize = 16.sp
+        fontSize = 13.4.sp // 16px
     ),
     labelSmall = TextStyle(
         fontFamily = Inter,
-        fontSize = 12.sp
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 10.05.sp // 12px
     )
 )
 
