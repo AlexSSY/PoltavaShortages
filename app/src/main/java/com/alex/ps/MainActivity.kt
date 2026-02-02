@@ -11,6 +11,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import com.alex.ps.ui.composables.CircularSegmentProgressBar
 import com.alex.ps.ui.theme.AppTheme
 
 class MainActivity : ComponentActivity() {
@@ -25,8 +28,14 @@ class MainActivity : ComponentActivity() {
                             .padding(innerPadding),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text(
-                            text = "Hello World!"
+                        CircularSegmentProgressBar(
+                            percent = 75,
+                            radius = 100.dp,
+                            width = 20.dp,
+                            backgroundColor = AppTheme.colorScheme.surface,
+                            barsColor = AppTheme.colorScheme.primary,
+                            segments = 24,
+                            gapAngle = 8F
                         )
                     }
                 }
