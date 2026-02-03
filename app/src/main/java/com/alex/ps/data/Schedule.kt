@@ -1,5 +1,9 @@
 package com.alex.ps.data
 
+import java.time.LocalDate
+
 data class Schedule(
-    val slots: List<Int>
+    val queue: Float,
+    val date: LocalDate,
+    val slots: List<Slot>
 )
