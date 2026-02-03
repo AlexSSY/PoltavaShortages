@@ -5,10 +5,10 @@ import kotlinx.coroutines.withContext
 
 class LoadAndSaveUseCase(
     val localRepository: LocalRepository,
-    val shortagesLoader: suspend () -> Shortages
+    val shortagesProvider: suspend () -> Shortages
 ) {
     suspend operator fun invoke() {
-        val downloaded = shortagesLoader()
+        val downloaded = shortagesProvider()
         localRepository.save(downloaded)
     }
 }

@@ -25,10 +25,10 @@ class Notifier(
     }
 
     fun notifyGav(isGavEnabled: Boolean) {
-        val title = "Млини свет: ГАВ"
+        val title = "ГАВ"
         val message =
-            if (isGavEnabled) "В Млинах ввели графiк аварiйних вiдключень"
-            else "Графiк погодинних вiдключеннь в Млинах скасовано"
+            if (isGavEnabled) "В области введен ГАВ"
+            else "В области отменен ГАВ"
 
         showNotification(
             id = 1,
@@ -40,16 +40,16 @@ class Notifier(
     fun notifyTodayScheduleChanged() {
         showNotification(
             id = 2,
-            title = "Млини свет: графiк",
-            message = "Сьогодняшнiй графiк змiнився"
+            title = "График на сегодня",
+            message = "График на сегодня изменился"
         )
     }
 
     fun notifyTomorrowScheduleAvailable() {
         showNotification(
             id = 3,
-            title = "Млини свет: графiк на завтра",
-            message = "Появився графiк на завтра"
+            title = "График на завтра",
+            message = "Появился график на завтра"
         )
     }
 
@@ -93,8 +93,32 @@ class Notifier(
     fun notifyTenMinutesBeforePowerOff() {
         showNotification(
             id = 4,
-            title = "Млини свет",
-            message = "Виключать свет через 10 минут!!!"
+            title = "Отключение света",
+            message = "Выключат свет через 10 минут!!!"
+        )
+    }
+
+    fun notifySpecGav(isGavEnabled: Boolean) {
+        val title = "Спец. ГАВ"
+        val message =
+            if (isGavEnabled) "В области введен СГАВ"
+            else "В области отменен СГАВ"
+
+        showNotification(
+            id = 5,
+            title = title,
+            message = message
+        )
+    }
+
+    fun notifyTomorrowScheduleChanged() {
+        val title = "График на завтра"
+        val message = "График на завтра изменился"
+
+        showNotification(
+            id = 6,
+            title = title,
+            message = message
         )
     }
 }

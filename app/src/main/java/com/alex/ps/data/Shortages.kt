@@ -3,8 +3,9 @@ package com.alex.ps.data
 import java.time.LocalDate
 
 data class Shortages(
-    val extra: List<String>,
-    val schedules: List<Schedule>
+    val isGav: Boolean,
+    val isSpecGav: Boolean,
+    val queues: List<Queue>
 )
 
 fun List<Schedule>.today(): Schedule? {
@@ -16,3 +17,6 @@ fun List<Schedule>.tomorrow(): Schedule? {
     val tomorrow = LocalDate.now().plusDays(1)
     return firstOrNull { schedule -> schedule.date == tomorrow }
 }
+
+fun List<Queue>.getOrNull(major: Int, minor: Int): Queue? =
+    firstOrNull { it.major == major && it.minor == minor }
