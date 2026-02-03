@@ -1,6 +1,7 @@
 package com.alex.ps.ui.composables
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -54,7 +55,7 @@ fun ElectricityAvailableWidget(
                 ) {
                     val backgroundColor =
                         when (period.state) {
-                            TimePeriodPresentationState.ACTIVE -> AppTheme.colorScheme.primary
+                            TimePeriodPresentationState.ACTIVE -> AppTheme.colorScheme.surface
                             TimePeriodPresentationState.SOON -> AppTheme.colorScheme.surface
                             TimePeriodPresentationState.PAST -> AppTheme.colorScheme.surface
                                 .copy(alpha = .5F)
@@ -62,10 +63,20 @@ fun ElectricityAvailableWidget(
 
                     val textColor =
                         when (period.state) {
-                            TimePeriodPresentationState.ACTIVE -> AppTheme.colorScheme.onPrimary
+                            TimePeriodPresentationState.ACTIVE -> AppTheme.colorScheme.onBackground
                             TimePeriodPresentationState.SOON -> AppTheme.colorScheme.onBackground
                             TimePeriodPresentationState.PAST -> AppTheme.colorScheme.onBackground
-                                .copy(alpha = .5F)
+                                .copy(alpha = .25F)
+                        }
+
+                    val rowModifier =
+                        when (period.state) {
+                            TimePeriodPresentationState.ACTIVE -> Modifier.border(
+                                width = 1.dp,
+                                shape = AppTheme.shape.medium,
+                                color = AppTheme.colorScheme.primary
+                            )
+                            else -> Modifier
                         }
 
                     Row(
@@ -75,6 +86,7 @@ fun ElectricityAvailableWidget(
                                 color = backgroundColor,
                                 shape = AppTheme.shape.medium
                             )
+                            .then(rowModifier)
                             .padding(
                                 horizontal = 14.dp,
                                 vertical =  10.dp
