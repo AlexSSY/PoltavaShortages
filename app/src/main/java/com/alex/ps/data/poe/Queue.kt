@@ -1,4 +1,4 @@
-package com.alex.ps.data
+package com.alex.ps.data.poe
 
 data class Queue(
     val major: Int,
