@@ -35,7 +35,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.alex.ps.data.settings.SettingsDataStore
+import com.alex.ps.ui.Screen
 import com.alex.ps.ui.composables.CircularSegmentProgressBar
 import com.alex.ps.ui.composables.ElectricityAvailableWidget
 import com.alex.ps.ui.composables.SettingsDrawer
@@ -44,132 +48,55 @@ import com.alex.ps.ui.composables.TimePeriodPresentation
 import com.alex.ps.ui.composables.TimePeriodPresentationState
 import com.alex.ps.ui.composables.TimerWidget
 import com.alex.ps.ui.composables.ToastWidget
+import com.alex.ps.ui.screens.HomeScreen
+import com.alex.ps.ui.screens.PreferencesScreen
 import com.alex.ps.ui.theme.AppTheme
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
-    @OptIn(ExperimentalMaterial3Api::class)
+//    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val periods by remember {
-                mutableStateOf(
-                    listOf(
-                        TimePeriodPresentation(
-                            start = "0:30",
-                            end = "2:30",
-                            duration = "2 hours",
-                            state = TimePeriodPresentationState.PAST
-                        ),
-                        TimePeriodPresentation(
-                            start = "6:30",
-                            end = "7:00",
-                            duration = "1.5 hours",
-                            state = TimePeriodPresentationState.ACTIVE
-                        ),
-                        TimePeriodPresentation(
-                            start = "11:30",
-                            end = "13:00",
-                            duration = "1.5 hours"
-                        ),
-                        TimePeriodPresentation(
-                            start = "17:30",
-                            end = "18:30",
-                            duration = "1 hour"
-                        ),
-                    )
-                )
-            }
-
-            val settingsDataStore by remember { SettingsDataStore(DataStore<Preferences>()) }
-            val drawerState = rememberDrawerState(DrawerValue.Closed)
-            val scope = rememberCoroutineScope()
+//            val navController = rememberNavController()
 
             AppTheme {
-                ModalNavigationDrawer(
-                    drawerState = drawerState,
-                    drawerContent = {
-                        SettingsDrawer(settingsDataStore)
-                    },
-                    gesturesEnabled = true
-                ) {
-                    Scaffold(
-                        topBar = {
-                            TopAppBar(
-                                title = {
-                                    Text(
-                                        text = "Today Schedule",
-                                        style = AppTheme.typography.titleMedium
-                                    )
-                                },
-                                actions = {
-                                    IconButton(
-                                        onClick = {
-                                            scope.launch {
-                                                drawerState.open()
-                                            }
-                                        }
-                                    ) {
-                                        Icon(
-                                            active = true,
-                                        )
-                                    }
-                                }
-                            )
-                        },
-                    ) { innerPadding ->
-                        Column(
-                            modifier = Modifier
-                                .padding(innerPadding)
-                                .fillMaxSize()
-                                .padding(
-                                    vertical = 24.dp,
-                                    horizontal = 58.dp
-                                ),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.spacedBy(27.dp)
-                        ) {
-                            TimerWidget(
-                                radius = 96.dp,
-                                isOn = true,
-                                time = "1:54",
-                                date = "02.02.2026",
-                                total = 1000F,
-                                remaining = 300F
-                            )
-                            FlowRow(
-                                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                                verticalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                ToastWidget(text = "ГАВ")
-                                ToastWidget(text = "СГАВ")
-                            }
-                            SummaryWidget(
-                                redHours = "-20",
-                                greenHours = "+4"
-                            )
-                            ElectricityAvailableWidget(
-                                periods = periods
-                            )
-                            Button(
-                                modifier = Modifier.fillMaxWidth(),
-                                shape = AppTheme.shape.medium,
-                                contentPadding = PaddingValues(
-                                    horizontal = 0.dp,
-                                    vertical = 6.dp
-                                ),
-                                onClick = {}
-                            ) {
-                                Text(
-                                    text = "Tomorrow Schedule",
-                                    style = AppTheme.typography.labelMedium,
-                                    color = AppTheme.colorScheme.onPrimary
-                                )
-                            }
-                        }
-                    }
-                }
+                Text("fdfdf")
+//                Scaffold(
+//                    topBar = {
+//                        TopAppBar(
+//                            title = {
+//                                Text(
+//                                    text = "Today Schedule",
+//                                    style = AppTheme.typography.titleMedium
+//                                )
+//                            },
+//                        )
+//                    },
+//                ) { innerPadding ->
+//                    NavHost(
+//                        modifier = Modifier.padding(innerPadding),
+//                        navController = navController,
+//                        startDestination = Screen.Main.route
+//                    ) {
+//                        composable(Screen.Main.route) {
+//                            HomeScreen(
+//                                onOpenPreferences = {
+//                                    navController.navigate(Screen.Preferences.route)
+//                                }
+//                            )
+//                        }
+//
+//                        composable(Screen.Preferences.route) {
+//                            PreferencesScreen(
+//                                onBack = {
+//                                    navController.popBackStack()
+//                                }
+//                            )
+//                        }
+//                    }
+//                }
             }
         }
     }

@@ -48,12 +48,13 @@ dependencies {
     // DataStore
     implementation("androidx.datastore:datastore-preferences:1.2.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
+    implementation(libs.androidx.navigation.compose)
 
     // Koin
-    val koinVersion = 4.2
-    implementation("io.insert-koin:koin-android:$koinVersion")
-    implementation("io.insert-koin:koin-androidx-workmanager:$koinVersion")
-    implementation("io.insert-koin:koin-androidx-compose:$koinVersion")
+//    val koinVersion = 4.2
+//    implementation("io.insert-koin:koin-android:$koinVersion")
+//    implementation("io.insert-koin:koin-androidx-workmanager:$koinVersion")
+//    implementation("io.insert-koin:koin-androidx-compose:$koinVersion")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
