@@ -26,7 +26,7 @@ import com.alex.ps.ui.theme.AppTheme
 
 @Composable
 fun HomeScreen(
-    onOpenPreferences: () -> Unit
+    onClickTomorrowScheduleLink: () -> Unit
 ) {
     val periods by remember {
         mutableStateOf(
@@ -96,7 +96,7 @@ fun HomeScreen(
                 horizontal = 0.dp,
                 vertical = 6.dp
             ),
-            onClick = {}
+            onClick = onClickTomorrowScheduleLink
         ) {
             Text(
                 text = "Tomorrow Schedule",
