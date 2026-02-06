@@ -52,10 +52,10 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended")
 
     // Koin
-//    val koinVersion = 4.2
-//    implementation("io.insert-koin:koin-android:$koinVersion")
-//    implementation("io.insert-koin:koin-androidx-workmanager:$koinVersion")
-//    implementation("io.insert-koin:koin-androidx-compose:$koinVersion")
+    val koinVersion = "4.1.1"
+    implementation("io.insert-koin:koin-android:$koinVersion")
+    implementation("io.insert-koin:koin-androidx-workmanager:$koinVersion")
+    implementation("io.insert-koin:koin-androidx-compose:$koinVersion")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
