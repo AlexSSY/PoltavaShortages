@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -14,17 +15,21 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.alex.ps.data.settings.Settings
+import com.alex.ps.data.settings.SettingsDataStore
 import com.alex.ps.ui.Screen
 import com.alex.ps.ui.screens.HomeScreen
 import com.alex.ps.ui.screens.PreferencesScreen
 import com.alex.ps.ui.screens.TomorrowScheduleScreen
 import com.alex.ps.ui.theme.AppTheme
+import org.koin.android.ext.android.get
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
@@ -47,7 +52,16 @@ class MainActivity : ComponentActivity() {
 
             val canGoBack = navController.previousBackStackEntry != null
 
-            AppTheme {
+            val settingsDataStore: SettingsDataStore = get()
+            val settings by settingsDataStore.settingsFlow.collectAsState(initial = Settings.default())
+
+            val isDarkTheme = when(settings.theme) {
+                com.alex.ps.data.settings.AppTheme.DARK -> true
+                com.alex.ps.data.settings.AppTheme.LIGHT -> false
+                com.alex.ps.data.settings.AppTheme.SYSTEM -> isSystemInDarkTheme()
+            }
+
+            AppTheme(isDarkTheme) {
                 Scaffold(
                     topBar = {
                         CenterAlignedTopAppBar(

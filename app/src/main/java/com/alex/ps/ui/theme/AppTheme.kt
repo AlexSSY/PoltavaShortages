@@ -33,7 +33,11 @@ private val lightColorScheme = lightColorScheme(
     primary = GreenBlue,
     onPrimary = WhiteCold100,
     secondary = BlueDark,
-    onSecondary = WhiteCold100
+    onSecondary = WhiteCold100,
+    error = RedVirgin,
+    onError = WhiteCold100,
+    surface = BlackHole50,
+    onSurface = WhiteCold100
 )
 
 private val typography = Typography(
