@@ -9,15 +9,16 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import java.net.SocketTimeoutException
 import java.time.LocalDate
+import kotlin.math.min
 
 class ShortagesDataSource {
     companion object {
-        private val SLOTS_URL = "https://www.poe.pl.ua/customs/dynamicgpv-info.php"
-        private val GAV_URL = "https://www.poe.pl.ua/customs/dynamic-unloading-info.php"
+        private const val SLOTS_URL = "https://www.poe.pl.ua/customs/dynamicgpv-info.php"
+        private const val GAV_URL = "https://www.poe.pl.ua/customs/dynamic-unloading-info.php"
     }
 
-    suspend fun load(): Shortages = withContext(Dispatchers.IO) {
-        val rawExtra = fetchExtraInfo()
+    suspend fun invoke(): Shortages = withContext(Dispatchers.IO) {
+        val rawExtra = downloadJson()
 
         Shortages(
             isGav = rawExtra.contains("ГАВ"),
@@ -26,30 +27,73 @@ class ShortagesDataSource {
         )
     }
 
-    private suspend fun fetchQueues(): List<Queue> {
+    private fun fetchQueues(): List<Queue> {
         val document = getDocumentFromUrl()
+        val allQueues = mutableListOf<Queue>()
 
-        val allQueues: List<Queue> = listOf(
-            Queue(1, 1, emptyList()),
-            Queue(1, 2, emptyList()),
-            Queue(2, 1, emptyList()),
-            Queue(2, 2, emptyList()),
-            Queue(3, 1, emptyList()),
-            Queue(3, 2, emptyList()),
-            Queue(4, 1, emptyList()),
-            Queue(4, 2, emptyList()),
-            Queue(5, 1, emptyList()),
-            Queue(5, 2, emptyList()),
-            Queue(6, 1, emptyList()),
-            Queue(6, 2, emptyList()),
-        )
+        (1..6).forEach { major ->
+            (1..2).forEach { minor ->
+                allQueues.add(
+                    Queue(major, minor, parseSchedules(document, major, minor))
+                )
+            }
+        }
 
         return allQueues
     }
 
-    private suspend fun parseQueue(, major: Int, minor: Int) {
+    private fun parseSchedules(document: Document, major: Int, minor: Int): List<Schedule> {
+        val schedules = mutableListOf<Schedule>()
+        val gpvDivs = document.select(".gpvinfodetail")
+        val dateNumbers = mutableMapOf<LocalDate, List<Int>>()
 
+        for (gpvDiv in gpvDivs) {
+
+            // parse date
+            val dateElement = gpvDiv.selectFirst("b")
+                ?: throw Exception("Failed to parse dateString")
+            val dateString = dateElement.text()
+            val date = parseUaDate(dateString)
+
+            // parse line of slots [red, green, yellow]
+            val trIndex = (major -1) * 2 + minor
+            val tr = gpvDiv.selectFirst(
+                    ".turnoff-scheduleui-table > tbody:nth-child(2) > tr:nth-child($trIndex)"
+            ) ?: throw Exception("Failed to parse tr")
+
+            val numbers = try {
+                tr.select("""td[class^="light_"]""").map { td ->
+                    val firstClass = td.className().split(" ").first()
+                    firstClass.split("light_").last().toInt()
+                }
+            } catch (e: NoSuchElementException) {
+                throw Exception("Failed to parse numbers", e)
+            }
+            dateNumbers[date] = numbers
+        }
+
+        dateNumbers.forEach { (date, numbers) ->
+            val slots = mutableListOf<Slot>()
+            numbers.forEachIndexed { idx, number ->
+                slots.add(
+                    Slot(slotStateFromNumber(number), idx)
+                )
+            }
+            schedules.add(
+                Schedule(date, slots)
+            )
+        }
+
+        return schedules
     }
+
+    fun slotStateFromNumber(number: Int): SlotState =
+        when(number) {
+            1 -> SlotState.GREEN
+            2 -> SlotState.RED
+            3 -> SlotState.YELLOW
+            else -> SlotState.GREEN
+        }
 
     private suspend fun downloadSchedules(): List<Schedule> {
         val schedules: List<Schedule> = mutableListOf()
@@ -57,10 +101,6 @@ class ShortagesDataSource {
 
 
         return schedules
-    }
-
-    private suspend fun fetchExtraInfo(): List<String> {
-        val rawJson = downloadJson()
     }
 
     private fun getDocumentFromUrl(): Document {
@@ -116,8 +156,9 @@ class ShortagesDataSource {
                     }
                     response.body?.string() ?: ""
                 }
-            } catch (_: Exception) {
+            } catch (e: Exception) {
                 // retry
+                println(e.message)
             }
         }
 

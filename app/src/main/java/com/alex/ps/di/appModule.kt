@@ -2,6 +2,7 @@ package com.alex.ps.di
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import com.alex.ps.data.poe.LocalRepository
 import com.alex.ps.data.settings.SettingsDataStore
 import com.alex.ps.data.settings.settingsDataStore
 import org.koin.android.ext.koin.androidContext
@@ -14,5 +15,9 @@ val appModule = module {
 
     single {
         SettingsDataStore(dataStore = get())
+    }
+
+    single<LocalRepository> {
+        LocalRepository(dataStore = get())
     }
 }

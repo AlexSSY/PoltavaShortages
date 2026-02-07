@@ -15,7 +15,9 @@ import kotlinx.coroutines.withContext
 class LocalRepository(
     val dataStore: DataStore<Preferences>
 ) {
-    private val SHORTAGES_KEY = stringPreferencesKey("shortages")
+    companion object{
+        private val SHORTAGES_KEY = stringPreferencesKey("shortages")
+    }
 
     /**
      * Источник истины

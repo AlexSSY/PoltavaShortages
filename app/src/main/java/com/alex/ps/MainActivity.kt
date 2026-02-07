@@ -17,18 +17,22 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.alex.ps.data.poe.ShortagesDataSource
 import com.alex.ps.data.settings.Settings
 import com.alex.ps.data.settings.SettingsDataStore
+import com.alex.ps.data.usecases.LoadAndSaveUseCase
 import com.alex.ps.ui.Screen
 import com.alex.ps.ui.screens.HomeScreen
 import com.alex.ps.ui.screens.PreferencesScreen
 import com.alex.ps.ui.screens.TomorrowScheduleScreen
 import com.alex.ps.ui.theme.AppTheme
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.get
 
 class MainActivity : ComponentActivity() {
@@ -59,6 +63,12 @@ class MainActivity : ComponentActivity() {
                 com.alex.ps.data.settings.AppTheme.DARK -> true
                 com.alex.ps.data.settings.AppTheme.LIGHT -> false
                 com.alex.ps.data.settings.AppTheme.SYSTEM -> isSystemInDarkTheme()
+            }
+
+            val scope = rememberCoroutineScope()
+            scope.launch {
+                val shortages = ShortagesDataSource().execute()
+                println("shortages loaded")
             }
 
             AppTheme(isDarkTheme) {
