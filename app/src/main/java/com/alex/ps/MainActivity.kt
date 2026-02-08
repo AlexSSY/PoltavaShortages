@@ -23,10 +23,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.alex.ps.data.poe.ShortagesDataSource
+import com.alex.ps.data.poe.PoeShortagesDataSource
 import com.alex.ps.data.settings.Settings
 import com.alex.ps.data.settings.SettingsDataStore
-import com.alex.ps.data.usecases.LoadAndSaveUseCase
 import com.alex.ps.ui.Screen
 import com.alex.ps.ui.screens.HomeScreen
 import com.alex.ps.ui.screens.PreferencesScreen
@@ -60,14 +59,14 @@ class MainActivity : ComponentActivity() {
             val settings by settingsDataStore.settingsFlow.collectAsState(initial = Settings.default())
 
             val isDarkTheme = when(settings.theme) {
-                com.alex.ps.data.settings.AppTheme.DARK -> true
-                com.alex.ps.data.settings.AppTheme.LIGHT -> false
-                com.alex.ps.data.settings.AppTheme.SYSTEM -> isSystemInDarkTheme()
+                com.alex.ps.data.settings.ThemeSetting.DARK -> true
+                com.alex.ps.data.settings.ThemeSetting.LIGHT -> false
+                com.alex.ps.data.settings.ThemeSetting.SYSTEM -> isSystemInDarkTheme()
             }
 
             val scope = rememberCoroutineScope()
             scope.launch {
-                val shortages = ShortagesDataSource().execute()
+                val shortages = PoeShortagesDataSource().getShortages()
                 println("shortages loaded")
             }
 

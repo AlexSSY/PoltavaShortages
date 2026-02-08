@@ -1,6 +1,6 @@
 package com.alex.ps.data.settings
 
-enum class AppLanguage {
+enum class LanguageSetting {
     SYSTEM,
     UK,
     EN,

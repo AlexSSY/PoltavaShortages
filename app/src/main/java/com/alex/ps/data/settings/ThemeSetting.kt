@@ -1,6 +1,6 @@
 package com.alex.ps.data.settings
 
-enum class AppTheme {
+enum class ThemeSetting {
     LIGHT,
     DARK,
     SYSTEM

@@ -1,6 +1,12 @@
 package com.alex.ps.data.poe
 
 import android.util.Log
+import com.alex.ps.domain.Queue
+import com.alex.ps.domain.Schedule
+import com.alex.ps.domain.Shortages
+import com.alex.ps.domain.ShortagesDataSource
+import com.alex.ps.domain.Slot
+import com.alex.ps.domain.SlotState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
@@ -9,15 +15,14 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import java.net.SocketTimeoutException
 import java.time.LocalDate
-import kotlin.math.min
 
-class ShortagesDataSource {
+class PoeShortagesDataSource: ShortagesDataSource {
     companion object {
         private const val SLOTS_URL = "https://www.poe.pl.ua/customs/dynamicgpv-info.php"
         private const val GAV_URL = "https://www.poe.pl.ua/customs/dynamic-unloading-info.php"
     }
 
-    suspend fun invoke(): Shortages = withContext(Dispatchers.IO) {
+    override suspend fun getShortages(): Shortages = withContext(Dispatchers.IO) {
         val rawExtra = downloadJson()
 
         Shortages(
@@ -73,14 +78,18 @@ class ShortagesDataSource {
         }
 
         dateNumbers.forEach { (date, numbers) ->
+            var totalElectricityInHours = 0F
             val slots = mutableListOf<Slot>()
             numbers.forEachIndexed { idx, number ->
+                if (number != 2) {
+                    totalElectricityInHours += 0.5F
+                }
                 slots.add(
                     Slot(slotStateFromNumber(number), idx)
                 )
             }
             schedules.add(
-                Schedule(date, slots)
+                Schedule(date, slots, totalElectricityInHours)
             )
         }
 

@@ -11,12 +11,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.alex.ps.data.settings.AppTheme
+import com.alex.ps.data.settings.ThemeSetting
 
 @Composable
 fun ThemeSection(
-    selectedTheme: AppTheme,
-    onThemeSelected: (AppTheme) -> Unit
+    selectedTheme: ThemeSetting,
+    onThemeSelected: (ThemeSetting) -> Unit
 ) {
     Column {
         Text(
@@ -24,7 +24,7 @@ fun ThemeSection(
             style = com.alex.ps.ui.theme.AppTheme.typography.titleMedium
         )
 
-        AppTheme.values().forEach { theme ->
+        ThemeSetting.values().forEach { theme ->
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier

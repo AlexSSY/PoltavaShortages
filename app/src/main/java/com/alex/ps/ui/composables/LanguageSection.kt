@@ -11,13 +11,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.alex.ps.data.settings.AppLanguage
+import com.alex.ps.data.settings.LanguageSetting
 import com.alex.ps.ui.theme.AppTheme
 
 @Composable
 fun LanguageSection(
-    selectedLanguage: AppLanguage,
-    onLanguageSelected: (AppLanguage) -> Unit
+    selectedLanguage: LanguageSetting,
+    onLanguageSelected: (LanguageSetting) -> Unit
 ) {
     Column {
         Text(
@@ -25,7 +25,7 @@ fun LanguageSection(
             style = AppTheme.typography.titleMedium
         )
 
-        AppLanguage.values().forEach { language ->
+        LanguageSetting.values().forEach { language ->
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier

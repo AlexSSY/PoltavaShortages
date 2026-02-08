@@ -2,9 +2,13 @@ package com.alex.ps.di
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import com.alex.ps.data.poe.LocalRepository
+import com.alex.ps.data.poe.PoeShortagesDataSource
+import com.alex.ps.data.poe.ShortagesRepositoryImpl
 import com.alex.ps.data.settings.SettingsDataStore
 import com.alex.ps.data.settings.settingsDataStore
+import com.alex.ps.domain.ShortagesDataSource
+import com.alex.ps.domain.ShortagesRepository
+import com.alex.ps.infrastructure.Notifier
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -17,7 +21,20 @@ val appModule = module {
         SettingsDataStore(dataStore = get())
     }
 
-    single<LocalRepository> {
-        LocalRepository(dataStore = get())
+    single<ShortagesDataSource> {
+        PoeShortagesDataSource()
+    }
+
+    single<ShortagesRepository> {
+        ShortagesRepositoryImpl(
+            shortagesDataSource = get(),
+            dataStore = get()
+        )
+    }
+
+    single {
+        Notifier(
+            context = androidContext()
+        )
     }
 }

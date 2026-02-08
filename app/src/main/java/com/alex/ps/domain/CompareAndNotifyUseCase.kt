@@ -1,16 +1,7 @@
-package com.alex.ps.data.usecases
+package com.alex.ps.domain
 
-import com.alex.ps.data.poe.Schedule
-import com.alex.ps.data.poe.Shortages
-import com.alex.ps.data.poe.getOrNull
-import com.alex.ps.data.poe.today
-import com.alex.ps.data.poe.tomorrow
 import com.alex.ps.data.settings.Settings
-import com.alex.ps.data.settings.SettingsDataStore
 import com.alex.ps.infrastructure.Notifier
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 
 class CompareAndNotifyUseCase(
     val notifier: Notifier,

@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.alex.ps.data.settings.AppTheme
+import com.alex.ps.data.settings.ThemeSetting
 import com.alex.ps.data.settings.SettingsDataStore
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
@@ -27,21 +27,21 @@ fun PreferencesScreen(
         Text(text = "Preferences Screen")
         Button(onClick = {
             scope.launch {
-                settingsDataStore.setTheme(AppTheme.SYSTEM)
+                settingsDataStore.setTheme(ThemeSetting.SYSTEM)
             }
         }) {
             Text(text = "System")
         }
         Button(onClick = {
             scope.launch {
-                settingsDataStore.setTheme(AppTheme.DARK)
+                settingsDataStore.setTheme(ThemeSetting.DARK)
             }
         }) {
             Text(text = "Dark")
         }
         Button(onClick = {
             scope.launch {
-                settingsDataStore.setTheme(AppTheme.LIGHT)
+                settingsDataStore.setTheme(ThemeSetting.LIGHT)
             }
         }) {
             Text(text = "Light")

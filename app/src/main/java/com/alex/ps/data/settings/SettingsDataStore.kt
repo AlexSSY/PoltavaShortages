@@ -22,12 +22,12 @@ class SettingsDataStore(
         dataStore.data.map { prefs ->
 
             val theme = prefs[THEME]
-                ?.let { runCatching { AppTheme.valueOf(it) }.getOrNull() }
-                ?: AppTheme.SYSTEM
+                ?.let { runCatching { ThemeSetting.valueOf(it) }.getOrNull() }
+                ?: ThemeSetting.SYSTEM
 
             val language = prefs[LANGUAGE]
-                ?.let { runCatching { AppLanguage.valueOf(it) }.getOrNull() }
-                ?: AppLanguage.SYSTEM
+                ?.let { runCatching { LanguageSetting.valueOf(it) }.getOrNull() }
+                ?: LanguageSetting.SYSTEM
 
             val queue = prefs[QUEUE_MAJOR]?.let { major ->
                 prefs[QUEUE_MINOR]?.let { minor ->
@@ -42,11 +42,11 @@ class SettingsDataStore(
             )
         }
 
-    suspend fun setTheme(theme: AppTheme) {
+    suspend fun setTheme(theme: ThemeSetting) {
         dataStore.edit { it[THEME] = theme.name }
     }
 
-    suspend fun setLanguage(language: AppLanguage) {
+    suspend fun setLanguage(language: LanguageSetting) {
         dataStore.edit { it[LANGUAGE] = language.name }
     }
 

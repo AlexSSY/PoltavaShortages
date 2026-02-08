@@ -1,4 +1,4 @@
-package com.alex.ps.data.poe
+package com.alex.ps.domain
 
 enum class SlotState {
     RED, GREEN, YELLOW

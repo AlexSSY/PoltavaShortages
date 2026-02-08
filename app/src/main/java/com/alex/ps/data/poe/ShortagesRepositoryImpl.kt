@@ -4,6 +4,10 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.alex.ps.domain.Shortages
+import com.alex.ps.domain.ShortagesDataSource
+import com.alex.ps.domain.ShortagesDiff
+import com.alex.ps.domain.ShortagesRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -12,17 +16,15 @@ import kotlinx.coroutines.withContext
 /**
  * Хранилище которое использует DataStore под капотом
  */
-class LocalRepository(
+class ShortagesRepositoryImpl(
+    val shortagesDataSource: ShortagesDataSource,
     val dataStore: DataStore<Preferences>
-) {
+): ShortagesRepository {
     companion object{
         private val SHORTAGES_KEY = stringPreferencesKey("shortages")
     }
 
-    /**
-     * Источник истины
-     */
-    val shortagesFlow: Flow<Shortages?> =
+    override val shortagesFlow: Flow<Shortages?> =
         dataStore.data.map { prefs ->
             prefs[SHORTAGES_KEY]?.let(::decode)
         }
@@ -42,6 +44,12 @@ class LocalRepository(
         dataStore.edit { prefs ->
             prefs[SHORTAGES_KEY] = encode(shortages)
         }
+    }
+
+    override suspend fun refresh(): ShortagesDiff {
+        val freshShortages = shortagesDataSource.getShortages()
+        save(freshShortages)
+        return ShortagesDiff()
     }
 
     private fun encode(shortages: Shortages): String {

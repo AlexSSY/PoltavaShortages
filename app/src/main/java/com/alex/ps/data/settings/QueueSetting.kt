@@ -1,6 +1,6 @@
 package com.alex.ps.data.settings
 
-enum class AppQueue {
+enum class QueueSetting {
     ONE_ONE,
     ONE_TWO,
     TWO_ONE,

@@ -1,14 +1,14 @@
 package com.alex.ps.data.settings
 
 data class Settings(
-    val theme: AppTheme,
-    val language: AppLanguage,
+    val theme: ThemeSetting,
+    val language: LanguageSetting,
     val selectedQueue: QueueKey
 ) {
     companion object {
         fun default(): Settings  = Settings(
-            AppTheme.SYSTEM,
-            AppLanguage.EN,
+            ThemeSetting.SYSTEM,
+            LanguageSetting.EN,
             QueueKey(1, 1)
         )
     }
