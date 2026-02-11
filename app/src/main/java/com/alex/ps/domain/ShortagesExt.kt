@@ -12,5 +12,5 @@ fun List<Schedule>.tomorrow(): Schedule? {
     return firstOrNull { schedule -> schedule.date == tomorrow }
 }
 
-fun List<Queue>.getOrNull(major: Int, minor: Int): Queue? =
-    firstOrNull { it.major == major && it.minor == minor }
+fun List<Queue>.getBy(major: Int, minor: Int): Queue =
+    first { it.major == major && it.minor == minor }

@@ -17,11 +17,11 @@ class CompareAndNotifyUseCase(
         val major = settings.selectedQueue.major
         val minor = settings.selectedQueue.minor
 
-        val oldQueue = old.queues.getOrNull(major, minor)
-        val newQueue = new.queues.getOrNull(major, minor)
+        val oldQueue = old.queues.getBy(major, minor)
+        val newQueue = new.queues.getBy(major, minor)
 
-        val oldSchedules = oldQueue?.schedules ?: emptyList()
-        val newSchedules = newQueue?.schedules ?: emptyList()
+        val oldSchedules = oldQueue.schedules
+        val newSchedules = newQueue.schedules
 
         notifyIfTodayScheduleChanged(oldSchedules, newSchedules)
         notifyIfTomorrowScheduleChanged(oldSchedules, newSchedules)

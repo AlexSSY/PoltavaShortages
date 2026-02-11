@@ -4,9 +4,12 @@ import com.alex.ps.domain.Queue
 import com.alex.ps.domain.Schedule
 import com.alex.ps.domain.Slot
 import com.alex.ps.domain.SlotState
+import com.alex.ps.domain.TimePeriod
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import java.sql.Time
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 class QueueListParser {
     fun parse(html: String): List<Queue>{
@@ -15,13 +18,52 @@ class QueueListParser {
 
         (1..6).forEach { major ->
             (1..2).forEach { minor ->
+                val schedules = parseSchedules(document, major, minor)
+
                 allQueues.add(
-                    Queue(major, minor, parseSchedules(document, major, minor))
+                    Queue(
+                        major,
+                        minor,
+                        schedules,
+                        calculateHappyPeriods(schedules))
                 )
             }
         }
 
         return allQueues
+    }
+
+    private fun calculateHappyPeriods(schedules: List<Schedule>): List<TimePeriod> {
+        val result = mutableListOf<TimePeriod>()
+
+        var startSlot: Slot? = null
+        schedules.forEach { schedule ->
+            schedule.slots.forEach { slot ->
+                if (slot.state == SlotState.RED && startSlot != null) {
+                    val start = localDateToDateTime(schedule.date)
+                        .plusMinutes(startSlot!!.i * 30L)
+                    val durationInMinutes = (slot.i - startSlot!!.i) * 30L
+                    result.add(
+                        TimePeriod(start, durationInMinutes)
+                    )
+                    startSlot = null
+                } else if (slot.state == SlotState.YELLOW && startSlot == null) {
+                    startSlot = slot
+                }
+            }
+        }
+
+        return result
+    }
+
+    private fun localDateToDateTime(localDate: LocalDate): LocalDateTime {
+        return LocalDateTime.of(
+            localDate.year,
+            localDate.month,
+            localDate.dayOfMonth,
+            0,
+            0
+        )
     }
 
     private fun parseSchedules(document: Document, major: Int, minor: Int): List<Schedule> {
