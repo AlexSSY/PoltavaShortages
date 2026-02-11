@@ -4,6 +4,5 @@ import java.time.LocalDate
 
 data class Schedule(
     val date: LocalDate,
-    val slots: List<Slot>,
-    val totalElectricityInHours: Float
+    val slots: List<Slot>
 )

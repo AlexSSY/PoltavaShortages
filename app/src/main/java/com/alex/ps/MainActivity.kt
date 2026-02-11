@@ -64,12 +64,6 @@ class MainActivity : ComponentActivity() {
                 com.alex.ps.data.settings.ThemeSetting.SYSTEM -> isSystemInDarkTheme()
             }
 
-            val scope = rememberCoroutineScope()
-            scope.launch {
-                val shortages = PoeShortagesDataSource().getShortages()
-                println("shortages loaded")
-            }
-
             AppTheme(isDarkTheme) {
                 Scaffold(
                     topBar = {
