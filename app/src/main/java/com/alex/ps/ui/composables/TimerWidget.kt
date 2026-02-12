@@ -27,7 +27,10 @@ fun TimerWidget(
             radius = radius,
             width = 15.dp,
             backgroundColor = AppTheme.colorScheme.surface,
-            segmentColor = AppTheme.colorScheme.primary,
+            segmentColor = if (timerModel.isOn)
+                AppTheme.colorScheme.primary
+            else
+                AppTheme.colorScheme.error,
             segments = 38
         )
         Column(

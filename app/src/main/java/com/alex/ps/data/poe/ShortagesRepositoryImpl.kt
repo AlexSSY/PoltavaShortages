@@ -45,8 +45,14 @@ class ShortagesRepositoryImpl(
     }
 
     override suspend fun refresh(): ShortagesDiff {
-        val freshShortages = shortagesDataSource.getShortages()
-        save(freshShortages)
+        val freshShortages = runCatching {
+            shortagesDataSource.getShortages()
+        }.getOrNull()
+
+        freshShortages?.let {
+            ::save
+        }
+
         return ShortagesDiff()
     }
 

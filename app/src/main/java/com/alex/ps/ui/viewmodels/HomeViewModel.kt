@@ -62,45 +62,57 @@ class HomeViewModel(
         now: LocalDateTime,
         periods: List<TimePeriod>
     ): TimerModel {
-        for (period in periods) {
-            if (period.contains(now)) {
-                val totalSeconds = period.durationInMinutes * 60
-                val remainingSeconds = Duration.between(now, period.end).toSeconds()
 
-                val minutes = remainingSeconds / 60
-                val hours = minutes / 60
-                val seconds = remainingSeconds % 60
+        val date = "${now.dayOfMonth}-${now.month}-${now.year}"
+        val currentPeriod = periods.find { it.contains(now) }
+        val isOn = currentPeriod != null
 
-                val prefix = if (remainingSeconds >= 3600)
-                        hours
-                    else
-                        minutes
+        var totalSeconds = 0L
+        var remainingSeconds = 0L
 
-                val suffix = if (remainingSeconds >= 3600)
-                        minutes
-                    else
-                        seconds
-
-                return TimerModel(
-                    isOn = true,
-                    time = "${prefix}:${suffix}",
-                    date = "${now.dayOfMonth}-${now.month}-${now.year}",
-                    total = totalSeconds.toFloat(),
-                    remaining = remainingSeconds.toFloat()
-                )
+        if (currentPeriod == null) {
+            val nearestPeriod = periods.filter { it.start > now }
+                .minByOrNull { Duration.between(now, it.start) }
+            if (nearestPeriod == null) {
+                return TimerModel.default()
             }
+            val nearestPreviousPeriod = periods.filter { it.end < now }
+                .minByOrNull { Duration.between(it.end, now) }
+            val end = nearestPreviousPeriod?.end ?: now.atStartOfDay()
+            totalSeconds = Duration.between(end, nearestPeriod.start).seconds
+            remainingSeconds = Duration.between(now, nearestPeriod.start).seconds
+        } else {
+            totalSeconds = currentPeriod.durationInMinutes * 60
+            remainingSeconds = Duration.between(now, currentPeriod.end).seconds
         }
-        val actualPeriods = periods.filter { it.start > now }
-        val nearestPeriod = actualPeriods.minByOrNull { Duration.between(now, it.start) }
 
-        return nearestPeriod?.let {
-            TimerModel(
-                isOn = false,
-                time = "0:0",
-                date = "1-1-2001",
-                total = it.durationInMinutes.toFloat(),
-                remaining = Duration.between(now, it.start).toMinutes().toFloat()
-            )
-        } ?: TimerModel.default()
+        val totalRemainingMinutes = remainingSeconds / 60
+        val hours = totalRemainingMinutes / 60
+        val minutes = totalRemainingMinutes - (hours * 60)
+        val seconds = (hours * 60 + minutes) % 60
+
+        val prefix = if (remainingSeconds >= 3600)
+            hours
+        else
+            minutes
+
+        val suffix = if (remainingSeconds >= 3600)
+            minutes
+        else
+            seconds
+
+        return TimerModel(
+            isOn = isOn,
+            time = "${prefix}:${suffix}",
+            date = date,
+            total = totalSeconds.toFloat(),
+            remaining = remainingSeconds.toFloat()
+        )
     }
+}
+
+private fun LocalDateTime.atStartOfDay(): LocalDateTime {
+    return LocalDateTime.of(
+        year, month, dayOfMonth, 0, 0
+    )
 }
