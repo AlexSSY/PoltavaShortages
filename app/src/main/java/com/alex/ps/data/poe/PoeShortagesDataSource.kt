@@ -18,11 +18,12 @@ class PoeShortagesDataSource(
 
     override suspend fun getShortages(): Shortages = withContext(Dispatchers.IO) {
         val rawExtra = downloadUrl(GAV_URL)
+        val gavHtml = downloadUrl(SLOTS_URL)
 
         Shortages(
             isGav = rawExtra.contains("ГАВ"),
             isSpecGav = rawExtra.contains("СГАВ"),
-            queues = queueListParser.parse(downloadUrl(SLOTS_URL))
+            queues = queueListParser.parse(gavHtml)
         )
     }
 
@@ -30,7 +31,7 @@ class PoeShortagesDataSource(
         val client = OkHttpClient()
 
         val request = Request.Builder()
-            .url(GAV_URL)
+            .url(url)
             .get()
             .build()
 
