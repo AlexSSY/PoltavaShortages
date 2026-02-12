@@ -64,12 +64,29 @@ class HomeViewModel(
     ): TimerModel {
         for (period in periods) {
             if (period.contains(now)) {
+                val totalSeconds = period.durationInMinutes * 60
+                val remainingSeconds = Duration.between(now, period.end).toSeconds()
+
+                val minutes = remainingSeconds / 60
+                val hours = minutes / 60
+                val seconds = remainingSeconds % 60
+
+                val prefix = if (remainingSeconds >= 3600)
+                        hours
+                    else
+                        minutes
+
+                val suffix = if (remainingSeconds >= 3600)
+                        minutes
+                    else
+                        seconds
+
                 return TimerModel(
                     isOn = true,
-                    time = "0:0",
-                    date = "1-1-2001",
-                    total = period.durationInMinutes.toFloat(),
-                    remaining = Duration.between(now, period.start).toMinutes().toFloat()
+                    time = "${prefix}:${suffix}",
+                    date = "${now.dayOfMonth}-${now.month}-${now.year}",
+                    total = totalSeconds.toFloat(),
+                    remaining = remainingSeconds.toFloat()
                 )
             }
         }

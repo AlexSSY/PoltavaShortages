@@ -6,10 +6,10 @@ data class TimePeriod(
     val start: LocalDateTime,
     val durationInMinutes: Long
 ) {
-    private val to: LocalDateTime
+    val end: LocalDateTime
         get() = start.plusMinutes(durationInMinutes)
 
     fun contains(localDateTime: LocalDateTime): Boolean {
-        return localDateTime < to && start < localDateTime
+        return localDateTime < end && start < localDateTime
     }
 }
