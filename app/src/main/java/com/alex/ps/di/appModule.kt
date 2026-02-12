@@ -10,7 +10,9 @@ import com.alex.ps.data.settings.settingsDataStore
 import com.alex.ps.domain.ShortagesDataSource
 import com.alex.ps.domain.ShortagesRepository
 import com.alex.ps.infrastructure.Notifier
+import com.alex.ps.ui.viewmodels.HomeViewModel
 import org.koin.android.ext.koin.androidContext
+import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val appModule = module {
@@ -36,6 +38,13 @@ val appModule = module {
         ShortagesRepositoryImpl(
             shortagesDataSource = get(),
             dataStore = get()
+        )
+    }
+
+    viewModel {
+        HomeViewModel(
+            settingsDataStore = get(),
+            shortagesRepository = get()
         )
     }
 

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,6 +25,8 @@ import com.alex.ps.ui.composables.TimePeriodPresentationState
 import com.alex.ps.ui.composables.TimerWidget
 import com.alex.ps.ui.composables.ToastWidget
 import com.alex.ps.ui.theme.AppTheme
+import com.alex.ps.ui.viewmodels.HomeViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun HomeScreen(
@@ -57,6 +60,8 @@ fun HomeScreen(
             )
         )
     }
+    val homeViewModel: HomeViewModel = koinViewModel()
+    val timerModelState = homeViewModel.timerModelFlow.collectAsState()
 
     Column(
         modifier = Modifier
@@ -70,11 +75,7 @@ fun HomeScreen(
     ) {
         TimerWidget(
             radius = 96.dp,
-            isOn = true,
-            time = "1:54",
-            date = "02.02.2026",
-            total = 1000F,
-            remaining = 300F
+            timerModel = timerModelState.value
         )
         FlowRow(
             horizontalArrangement = Arrangement.spacedBy(8.dp),

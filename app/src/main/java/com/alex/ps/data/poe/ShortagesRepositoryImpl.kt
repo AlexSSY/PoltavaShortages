@@ -8,10 +8,14 @@ import com.alex.ps.domain.Shortages
 import com.alex.ps.domain.ShortagesDataSource
 import com.alex.ps.domain.ShortagesDiff
 import com.alex.ps.domain.ShortagesRepository
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import java.time.LocalDate
+import java.time.LocalDateTime
 
 /**
  * Хранилище которое использует DataStore под капотом
@@ -29,18 +33,12 @@ class ShortagesRepositoryImpl(
             prefs[SHORTAGES_KEY]?.let(::decode)
         }
 
-    /**
-     * Просто загружает данные из DataStore
-     */
-    suspend fun load(): Shortages? {
-        TODO("implement!!!")
-    }
+    private val gson: Gson = GsonBuilder()
+        .registerTypeAdapter(LocalDate::class.java, LocalDateAdapter())
+        .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeAdapter())
+        .create()
 
-    /**
-     * Сохраняет данные полученные из сети в DataStore, и пушит их в shortagesFlow
-     * как новые (актуальные) данные
-     */
-    suspend fun save(shortages: Shortages) = withContext(Dispatchers.IO) {
+    private suspend fun save(shortages: Shortages) = withContext(Dispatchers.IO) {
         dataStore.edit { prefs ->
             prefs[SHORTAGES_KEY] = encode(shortages)
         }
@@ -53,10 +51,10 @@ class ShortagesRepositoryImpl(
     }
 
     private fun encode(shortages: Shortages): String {
-        TODO("JSON encode (kotlinx.serialization / Gson)")
+        return gson.toJson(shortages)
     }
 
     private fun decode(json: String): Shortages {
-        TODO("JSON decode")
+        return gson.fromJson(json, Shortages::class.java)
     }
 }
