@@ -9,6 +9,7 @@ import com.alex.ps.domain.ShortagesRepository
 import com.alex.ps.domain.Slot
 import com.alex.ps.domain.SlotState
 import com.alex.ps.domain.TimePeriod
+import com.alex.ps.domain.getBy
 import com.alex.ps.ui.model.TimerModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -47,7 +48,8 @@ class HomeViewModel(
         combine(nowStateFlow, shortagesStateFlow) { now, shortages ->
             shortages?.let {
 //                calculateCurrentTimerState(now, it.queues[1].happyPeriods)
-                calcTimerState(now, it.queues[1])
+                calcTimerState(now, it.queues.getBy(1, 2).slots)
+//                TimerModel.default()
             } ?: TimerModel.default()
 
         }.stateIn(
@@ -116,26 +118,78 @@ class HomeViewModel(
 
     private fun calcTimerState(
         now: LocalDateTime,
-        queue: Queue
+        slots: List<Slot>
     ): TimerModel {
-        val currentSlot = queue.slots.find { it.intersect(now) }
+        val currentSlot = slots.find { it.intersect(now) }
+        val currentSlotIndex = slots.indexOf(currentSlot)
 
         if (currentSlot == null) {
             return TimerModel.default()
         }
 
         val isOn = currentSlot.state != SlotState.RED
+        var prevSlot: Slot? = null
+        var nextSlot: Slot? = null
 
-        val slotStateToFind = when(currentSlot.state) {
+        val prevSlotStateToFind = when(currentSlot.state) {
+            SlotState.RED -> SlotState.GREEN
+            SlotState.GREEN -> SlotState.RED
+            SlotState.YELLOW -> SlotState.RED
+        }
+
+        val nextSlotStateToFind = when(currentSlot.state) {
             SlotState.RED -> SlotState.YELLOW
             SlotState.GREEN -> SlotState.RED
             SlotState.YELLOW -> SlotState.RED
         }
 
-        val nextSlot = queue.slots.filter { it.i > currentSlot.i }
-            .find { it.state == slotStateToFind }
+        for (i in (1..slots.size / 2)) {
+            val prevIdx = currentSlotIndex - i
+            if (prevSlot == null && prevIdx >= 0) {
+                if (slots[prevIdx].state == prevSlotStateToFind) {
+                    prevSlot = slots[prevIdx]
+                }
+            }
 
-        val endTime
+            val nextIdx = currentSlotIndex + i
+            if (nextSlot == null && nextIdx < slots.size) {
+                if (slots[nextIdx].state == nextSlotStateToFind) {
+                    nextSlot = slots[nextIdx]
+                }
+            }
+
+            if (prevSlot != null && nextSlot != null) {
+                break
+            }
+        }
+
+        val fromDateTime = prevSlot?.end ?: slots.first().end
+        val toDateTime = nextSlot?.start ?: slots.last().end
+        val remainingSeconds = Duration.between(now, toDateTime).seconds
+
+        val hours = remainingSeconds / 3600
+        val minutes = (remainingSeconds % 3600) / 60
+        val seconds = remainingSeconds % 60
+
+        val timePrefix = if (hours > 0)
+            hours
+        else
+            minutes
+
+        val timeSuffix = if (hours > 0)
+            minutes
+        else
+            seconds
+
+        val totalSeconds = Duration.between(fromDateTime, toDateTime).seconds
+
+        return TimerModel(
+            isOn = isOn,
+            time = "%02d:%02d".format(timePrefix, timeSuffix),
+            date = "${now.dayOfMonth}.${now.month}.${now.year}",
+            total = totalSeconds.toFloat(),
+            remaining = remainingSeconds.toFloat()
+        )
     }
 }
 

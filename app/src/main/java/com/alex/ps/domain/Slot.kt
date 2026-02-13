@@ -10,11 +10,16 @@ data class Slot(
     val date: LocalDate
 ) {
     fun intersect(localDateTime: LocalDateTime): Boolean {
-        val end = LocalDateTime.of(
-            date,
-            LocalTime.ofSecondOfDay(0)
-        ).plusMinutes(30L * i)
-        val start = end.minusMinutes(30L)
         return localDateTime <= end && localDateTime > start
     }
+
+    val start: LocalDateTime
+        get() {
+            return date.atStartOfDay().plusMinutes(30L * i)
+        }
+
+    val end: LocalDateTime
+        get() {
+            return date.atStartOfDay().plusMinutes(30L * i + 30L)
+        }
 }

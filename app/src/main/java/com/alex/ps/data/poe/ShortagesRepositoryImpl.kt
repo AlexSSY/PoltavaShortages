@@ -50,7 +50,7 @@ class ShortagesRepositoryImpl(
         }.getOrNull()
 
         freshShortages?.let {
-            ::save
+            save(it)
         }
 
         return ShortagesDiff()
