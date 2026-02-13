@@ -3,8 +3,11 @@ package com.alex.ps.ui.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alex.ps.data.settings.SettingsDataStore
+import com.alex.ps.domain.Queue
 import com.alex.ps.domain.Shortages
 import com.alex.ps.domain.ShortagesRepository
+import com.alex.ps.domain.Slot
+import com.alex.ps.domain.SlotState
 import com.alex.ps.domain.TimePeriod
 import com.alex.ps.ui.model.TimerModel
 import kotlinx.coroutines.delay
@@ -43,7 +46,8 @@ class HomeViewModel(
     val timerModelFlow: StateFlow<TimerModel> =
         combine(nowStateFlow, shortagesStateFlow) { now, shortages ->
             shortages?.let {
-                calculateCurrentTimerState(now, it.queues[1].happyPeriods)
+//                calculateCurrentTimerState(now, it.queues[1].happyPeriods)
+                calcTimerState(now, it.queues[1])
             } ?: TimerModel.default()
 
         }.stateIn(
@@ -108,6 +112,30 @@ class HomeViewModel(
             total = totalSeconds.toFloat(),
             remaining = remainingSeconds.toFloat()
         )
+    }
+
+    private fun calcTimerState(
+        now: LocalDateTime,
+        queue: Queue
+    ): TimerModel {
+        val currentSlot = queue.slots.find { it.intersect(now) }
+
+        if (currentSlot == null) {
+            return TimerModel.default()
+        }
+
+        val isOn = currentSlot.state != SlotState.RED
+
+        val slotStateToFind = when(currentSlot.state) {
+            SlotState.RED -> SlotState.YELLOW
+            SlotState.GREEN -> SlotState.RED
+            SlotState.YELLOW -> SlotState.RED
+        }
+
+        val nextSlot = queue.slots.filter { it.i > currentSlot.i }
+            .find { it.state == slotStateToFind }
+
+        val endTime
     }
 }
 

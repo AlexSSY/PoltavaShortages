@@ -1,13 +1,11 @@
 package com.alex.ps.data.poe
 
 import com.alex.ps.domain.Queue
-import com.alex.ps.domain.Schedule
 import com.alex.ps.domain.Slot
 import com.alex.ps.domain.SlotState
 import com.alex.ps.domain.TimePeriod
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import java.sql.Time
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -18,14 +16,14 @@ class QueueListParser {
 
         (1..6).forEach { major ->
             (1..2).forEach { minor ->
-                val schedules = parseSchedules(document, major, minor)
+                val slots = parseSlots(document, major, minor)
 
                 allQueues.add(
                     Queue(
                         major,
                         minor,
-                        schedules,
-                        calculateHappyPeriods(schedules))
+                        slots,
+                        calculateHappyPeriods(slots))
                 )
             }
         }
@@ -33,23 +31,21 @@ class QueueListParser {
         return allQueues
     }
 
-    private fun calculateHappyPeriods(schedules: List<Schedule>): List<TimePeriod> {
+    private fun calculateHappyPeriods(slots: List<Slot>): List<TimePeriod> {
         val result = mutableListOf<TimePeriod>()
 
         var startSlot: Slot? = null
-        schedules.forEach { schedule ->
-            schedule.slots.forEach { slot ->
-                if (slot.state == SlotState.RED && startSlot != null) {
-                    val start = localDateToDateTime(schedule.date)
-                        .plusMinutes(startSlot!!.i * 30L)
-                    val durationInMinutes = (slot.i - startSlot!!.i) * 30L
-                    result.add(
-                        TimePeriod(start, durationInMinutes)
-                    )
-                    startSlot = null
-                } else if (slot.state == SlotState.YELLOW && startSlot == null) {
-                    startSlot = slot
-                }
+        slots.forEach { slot ->
+            if (slot.state == SlotState.RED && startSlot != null) {
+                val start = localDateToDateTime(slot.date)
+                    .plusMinutes(startSlot.i * 30L)
+                val durationInMinutes = (slot.i - startSlot.i) * 30L
+                result.add(
+                    TimePeriod(start, durationInMinutes)
+                )
+                startSlot = null
+            } else if (slot.state == SlotState.YELLOW && startSlot == null) {
+                startSlot = slot
             }
         }
 
@@ -66,8 +62,8 @@ class QueueListParser {
         )
     }
 
-    private fun parseSchedules(document: Document, major: Int, minor: Int): List<Schedule> {
-        val schedules = mutableListOf<Schedule>()
+    private fun parseSlots(document: Document, major: Int, minor: Int): List<Slot> {
+        val slots = mutableListOf<Slot>()
         val gpvDivs = document.select(".gpvinfodetail")
         val dateNumbers = mutableMapOf<LocalDate, List<Int>>()
 
@@ -97,18 +93,14 @@ class QueueListParser {
         }
 
         dateNumbers.forEach { (date, numbers) ->
-            val slots = mutableListOf<Slot>()
             numbers.forEachIndexed { idx, number ->
                 slots.add(
-                    Slot(slotStateFromNumber(number), idx)
+                    Slot(slotStateFromNumber(number), idx, date)
                 )
             }
-            schedules.add(
-                Schedule(date, slots)
-            )
         }
 
-        return schedules
+        return slots
     }
 
     private fun parseUaDate(uaDateString: String): LocalDate {

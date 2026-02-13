@@ -1,6 +1,6 @@
 package com.alex.ps.domain
 
-fun Schedule.diff(other: Schedule): List<FieldChange<*>> {
+//fun Schedule.diff(other: Schedule): List<FieldChange<*>> {
 //    if (totalElectricityInHours != other.totalElectricityInHours) {
 //        return listOf(
 //            FieldChange<Float>(
@@ -11,5 +11,5 @@ fun Schedule.diff(other: Schedule): List<FieldChange<*>> {
 //        )
 //    }
 
-    return emptyList()
-}
+//    return emptyList()
+//}
