@@ -204,7 +204,7 @@ class HomeViewModel(
             }
         }
 
-        val fromDateTime = prevSlot?.end ?: slots.first().end
+        val fromDateTime = prevSlot?.end ?: slots.first().start
         val toDateTime = nextSlot?.start ?: slots.last().end
         val remainingSeconds = Duration.between(now, toDateTime).seconds
 
@@ -231,11 +231,5 @@ class HomeViewModel(
             total = totalSeconds.toFloat(),
             remaining = remainingSeconds.toFloat()
         )
-    }
-
-    private fun calcSummary(
-        todaySlots: List<Slot>
-    ): SummaryModel {
-        return SummaryModel("1", "23")
     }
 }
