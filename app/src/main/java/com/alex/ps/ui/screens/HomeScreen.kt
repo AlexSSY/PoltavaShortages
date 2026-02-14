@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.alex.ps.data.settings.SettingsDataStore
 import com.alex.ps.ui.composables.ElectricityAvailableWidget
+import com.alex.ps.ui.composables.ExtraInfoWidget
 import com.alex.ps.ui.composables.SummaryWidget
 import com.alex.ps.ui.composables.TimePeriodPresentation
 import com.alex.ps.ui.composables.TimePeriodPresentationState
@@ -32,37 +33,11 @@ import org.koin.androidx.compose.koinViewModel
 fun HomeScreen(
     onClickTomorrowScheduleLink: () -> Unit
 ) {
-    val periods by remember {
-        mutableStateOf(
-            listOf(
-                TimePeriodPresentation(
-                    start = "0:30",
-                    end = "2:30",
-                    duration = "2 hours",
-                    state = TimePeriodPresentationState.PAST
-                ),
-                TimePeriodPresentation(
-                    start = "6:30",
-                    end = "7:00",
-                    duration = "1.5 hours",
-                    state = TimePeriodPresentationState.ACTIVE
-                ),
-                TimePeriodPresentation(
-                    start = "11:30",
-                    end = "13:00",
-                    duration = "1.5 hours"
-                ),
-                TimePeriodPresentation(
-                    start = "17:30",
-                    end = "18:30",
-                    duration = "1 hour"
-                ),
-            )
-        )
-    }
     val homeViewModel: HomeViewModel = koinViewModel()
     val timerModelState = homeViewModel.timerModelFlow.collectAsState()
     val summaryModelState = homeViewModel.summaryModelFlow.collectAsState()
+    val periods = homeViewModel.periodsModelStateFlow.collectAsState()
+    val extraState = homeViewModel.extraInfoStateFlow.collectAsState()
 
     Column(
         modifier = Modifier
@@ -78,18 +53,14 @@ fun HomeScreen(
             radius = 96.dp,
             timerModel = timerModelState.value
         )
-        FlowRow(
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            ToastWidget(text = "ГАВ")
-            ToastWidget(text = "СГАВ")
-        }
+        ExtraInfoWidget(
+            extra = extraState.value
+        )
         SummaryWidget(
             summaryModel = summaryModelState.value
         )
         ElectricityAvailableWidget(
-            periods = periods
+            periods = periods.value
         )
         Button(
             modifier = Modifier.fillMaxWidth(),

@@ -9,6 +9,9 @@ import com.alex.ps.domain.ShortagesRepository
 import com.alex.ps.domain.Slot
 import com.alex.ps.domain.SlotState
 import com.alex.ps.domain.getBy
+import com.alex.ps.ui.composables.TimePeriodPresentation
+import com.alex.ps.ui.composables.TimePeriodPresentationState
+import com.alex.ps.ui.model.PeriodModel
 import com.alex.ps.ui.model.SummaryModel
 import com.alex.ps.ui.model.TimerModel
 import kotlinx.coroutines.delay
@@ -99,6 +102,54 @@ class HomeViewModel(
             SharingStarted.WhileSubscribed(1_000),
             SummaryModel.default()
         )
+
+    val periodsModelStateFlow: StateFlow<List<TimePeriodPresentation>> =
+        combine(nowTimeStateFlow, queueFlow) { nowTime, queue ->
+            calcPeriods(nowTime, queue)
+        }.stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(1_000),
+            emptyList()
+        )
+
+    val extraInfoStateFlow: StateFlow<List<String>> =
+        shortagesStateFlow.map { shortages ->
+            val extra = mutableListOf<String>()
+
+            if (shortages.isGav) {
+                extra.add("GAV")
+            }
+
+            if (shortages.isSpecGav) {
+                extra.add("SpecGAV")
+            }
+
+            extra
+        }.stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(1_000),
+            emptyList()
+        )
+
+    private fun calcPeriods(nowTime: LocalDateTime, queue: Queue): List<TimePeriodPresentation> {
+        return queue.happyPeriods.filter {
+            it.start.dayOfMonth == nowTime.dayOfMonth
+        }.map { timePeriod ->
+            val state = if (timePeriod.contains(nowTime))
+                TimePeriodPresentationState.ACTIVE
+            else if (timePeriod.end < nowTime)
+                TimePeriodPresentationState.PAST
+            else
+                TimePeriodPresentationState.SOON
+
+            TimePeriodPresentation(
+                start = "${timePeriod.start.hour}:${timePeriod.start.minute}",
+                end = "${timePeriod.end.hour}:${timePeriod.end.minute}",
+                duration = "${timePeriod.durationInMinutes / 60F} hours",
+                state = state
+            )
+        }
+    }
 
     init {
         viewModelScope.launch {

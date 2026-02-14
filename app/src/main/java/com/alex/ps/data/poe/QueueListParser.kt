@@ -6,6 +6,7 @@ import com.alex.ps.domain.SlotState
 import com.alex.ps.domain.TimePeriod
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -37,14 +38,16 @@ class QueueListParser {
         var startSlot: Slot? = null
         slots.forEach { slot ->
             if (slot.state == SlotState.RED && startSlot != null) {
-                val start = localDateToDateTime(slot.date)
+                val start = localDateToDateTime(startSlot.date)
                     .plusMinutes(startSlot.i * 30L)
-                val durationInMinutes = (slot.i - startSlot.i) * 30L
+                val end = localDateToDateTime(slot.date)
+                    .plusMinutes(slot.i * 30L)
+                val durationInMinutes = Duration.between(start, end).toMinutes()
                 result.add(
                     TimePeriod(start, durationInMinutes)
                 )
                 startSlot = null
-            } else if (slot.state == SlotState.YELLOW && startSlot == null) {
+            } else if ((slot.state == SlotState.YELLOW || slot.state == SlotState.GREEN) && startSlot == null) {
                 startSlot = slot
             }
         }
