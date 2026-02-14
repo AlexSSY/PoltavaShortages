@@ -62,6 +62,7 @@ fun HomeScreen(
     }
     val homeViewModel: HomeViewModel = koinViewModel()
     val timerModelState = homeViewModel.timerModelFlow.collectAsState()
+    val summaryModelState = homeViewModel.summaryModelFlow.collectAsState()
 
     Column(
         modifier = Modifier
@@ -85,8 +86,7 @@ fun HomeScreen(
             ToastWidget(text = "СГАВ")
         }
         SummaryWidget(
-            redHours = "-20",
-            greenHours = "+4"
+            summaryModel = summaryModelState.value
         )
         ElectricityAvailableWidget(
             periods = periods

@@ -12,9 +12,5 @@ import java.time.LocalDate
 //    return firstOrNull { schedule -> schedule.date == tomorrow }
 //}
 
-fun Shortages.default(): Shortages {
-    return Shortages(isGav = false, isSpecGav = false, queues = queues)
-}
-
 fun List<Queue>.getBy(major: Int, minor: Int): Queue =
     first { it.major == major && it.minor == minor }

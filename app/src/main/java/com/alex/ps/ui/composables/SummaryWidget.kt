@@ -9,13 +9,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.alex.ps.ui.model.SummaryModel
 import com.alex.ps.ui.theme.AppTheme
 
 @Composable
 fun SummaryWidget(
     modifier: Modifier = Modifier,
-    redHours: String,
-    greenHours: String
+    summaryModel: SummaryModel
 ) {
     Row(
         modifier = modifier
@@ -38,12 +38,12 @@ fun SummaryWidget(
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             Text(
-                text = redHours,
+                text = summaryModel.redHours,
                 style = AppTheme.typography.labelMedium,
                 color = AppTheme.colorScheme.error
             )
             Text(
-                text = greenHours,
+                text = summaryModel.greenHours,
                 style = AppTheme.typography.labelMedium,
                 color = AppTheme.colorScheme.primary
             )

@@ -7,4 +7,10 @@ data class Queue(
 
     // optional
     val happyPeriods: List<TimePeriod>
-)
+) {
+    companion object {
+        fun default(): Queue {
+            return Queue(1, 1, emptyList(), emptyList())
+        }
+    }
+}

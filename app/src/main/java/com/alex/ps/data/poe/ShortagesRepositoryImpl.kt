@@ -28,9 +28,9 @@ class ShortagesRepositoryImpl(
         private val SHORTAGES_KEY = stringPreferencesKey("shortages")
     }
 
-    override val shortagesFlow: Flow<Shortages?> =
+    override val shortagesFlow: Flow<Shortages> =
         dataStore.data.map { prefs ->
-            prefs[SHORTAGES_KEY]?.let(::decode)
+            prefs[SHORTAGES_KEY]?.let(::decode) ?: Shortages.default()
         }
 
     private val gson: Gson = GsonBuilder()

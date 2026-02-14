@@ -6,7 +6,7 @@ interface ShortagesRepository {
     /**
      * Источник истинны
      */
-    val shortagesFlow: Flow<Shortages?>
+    val shortagesFlow: Flow<Shortages>
 
     /**
      * Обновить граффик и получить изменения
