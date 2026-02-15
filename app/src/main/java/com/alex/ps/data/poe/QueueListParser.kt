@@ -52,6 +52,18 @@ class QueueListParser {
             }
         }
 
+        startSlot?.let {
+            val start = localDateToDateTime(it.date)
+                .plusMinutes(it.i * 30L)
+            val slot = slots.last()
+            val end = localDateToDateTime(slot.date)
+                .plusMinutes(slot.i * 30L)
+            val durationInMinutes = Duration.between(start, end).toMinutes()
+            result.add(
+                TimePeriod(start, durationInMinutes)
+            )
+        }
+
         return result
     }
 
