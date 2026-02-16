@@ -1,12 +1,12 @@
 package com.alex.ps.domain
 
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 
 interface ShortagesRepository {
     /**
      * Источник истинны
      */
-    val shortagesFlow: Flow<Shortages>
+    val shortagesFlow: StateFlow<Shortages>
 
     /**
      * Обновить граффик и получить изменения

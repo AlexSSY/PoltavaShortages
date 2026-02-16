@@ -1,18 +1,18 @@
-package com.alex.ps.ui.viewmodels
+package com.alex.ps.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alex.ps.data.SettingsRepositoryImpl
 import com.alex.ps.domain.Queue
+import com.alex.ps.domain.QueueProvider
 import com.alex.ps.domain.Shortages
 import com.alex.ps.domain.ShortagesRepository
 import com.alex.ps.domain.Slot
 import com.alex.ps.domain.SlotState
+import com.alex.ps.domain.TimeProvider
 import com.alex.ps.domain.getBy
 import com.alex.ps.ui.composables.TimePeriodPresentation
 import com.alex.ps.ui.composables.TimePeriodPresentationState
-import com.alex.ps.ui.model.SummaryModel
-import com.alex.ps.ui.model.TimerModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -25,51 +25,18 @@ import kotlinx.coroutines.launch
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
+import kotlin.math.max
 
 class HomeViewModel(
-    settingsDataStore: SettingsRepositoryImpl,
-    shortagesRepository: ShortagesRepository
+    shortagesRepository: ShortagesRepository,
+    timeProvider: TimeProvider,
+    queueProvider: QueueProvider
 ): ViewModel() {
-    private val nowTimeStateFlow: Flow<LocalDateTime> = flow {
-        while (true) {
-            emit(LocalDateTime.now())
-            delay(1_000)
-        }
-    }.stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(1_000),
-        LocalDateTime.now()
-    )
-
-    private val nowDateStateFlow: StateFlow<LocalDate> =
-        nowTimeStateFlow.map {
-            it.toLocalDate()
-        }.stateIn(
-            viewModelScope,
-            SharingStarted.WhileSubscribed(1_000),
-            LocalDate.now()
-        )
-
-    private val shortagesStateFlow: StateFlow<Shortages> = shortagesRepository.shortagesFlow
-        .stateIn(
-            viewModelScope,
-            SharingStarted.WhileSubscribed(1_000),
-            Shortages.default()
-        )
-
-    val queueFlow: StateFlow<Queue> =
-        combine(settingsDataStore.settingsFlow, shortagesStateFlow) { settings, shortages ->
-            val major = 1//settings.selectedQueue.major
-            val minor = 2//settings.selectedQueue.minor
-            shortages.queues.getBy(major, minor)
-        }.stateIn(
-            viewModelScope,
-            SharingStarted.WhileSubscribed(1_000),
-            Queue.default()
-        )
-
     val timerModelFlow: StateFlow<TimerModel> =
-        combine(nowTimeStateFlow, queueFlow) { now, queue ->
+        combine(
+            timeProvider.timeFlow,
+            queueProvider.queueFlow
+        ) { now, queue ->
             calcTimerState(now, queue.slots)
         }.stateIn(
             viewModelScope,
@@ -78,8 +45,11 @@ class HomeViewModel(
         )
 
     val todaySlots: StateFlow<List<Slot>> =
-        combine(nowDateStateFlow, queueFlow) { nowDate, queue ->
-            queue.slots.filter { slot -> slot.date == nowDate }
+        combine(
+            timeProvider.timeFlow,
+            queueProvider.queueFlow
+        ) { nowDate, queue ->
+            queue.slots.filter { slot -> slot.date == nowDate.toLocalDate() }
         }.stateIn(
             viewModelScope,
             started = SharingStarted.WhileSubscribed(1_000),
@@ -103,7 +73,10 @@ class HomeViewModel(
         )
 
     val periodsModelStateFlow: StateFlow<List<TimePeriodPresentation>> =
-        combine(nowTimeStateFlow, queueFlow) { nowTime, queue ->
+        combine(
+            timeProvider.timeFlow,
+            queueProvider.queueFlow
+        ) { nowTime, queue ->
             calcPeriods(nowTime, queue)
         }.stateIn(
             viewModelScope,
@@ -112,7 +85,7 @@ class HomeViewModel(
         )
 
     val extraInfoStateFlow: StateFlow<List<String>> =
-        shortagesStateFlow.map { shortages ->
+        shortagesRepository.shortagesFlow.map { shortages ->
             val extra = mutableListOf<String>()
 
             if (shortages.isGav) {
@@ -183,7 +156,7 @@ class HomeViewModel(
             SlotState.YELLOW -> SlotState.RED
         }
 
-        for (i in (1..slots.size / 2)) {
+        for (i in 1 until slots.size) {
             val prevIdx = currentSlotIndex - i
             if (prevSlot == null && prevIdx >= 0) {
                 if (slots[prevIdx].state == prevSlotStateToFind) {
@@ -205,7 +178,7 @@ class HomeViewModel(
 
         val fromDateTime = prevSlot?.end ?: slots.first().start
         val toDateTime = nextSlot?.start ?: slots.last().end
-        val remainingSeconds = Duration.between(now, toDateTime).seconds
+        val remainingSeconds = max(0, Duration.between(now, toDateTime).seconds)
 
         val hours = remainingSeconds / 3600
         val minutes = (remainingSeconds % 3600) / 60
@@ -221,12 +194,12 @@ class HomeViewModel(
         else
             seconds
 
-        val totalSeconds = Duration.between(fromDateTime, toDateTime).seconds
+        val totalSeconds = max(1, Duration.between(fromDateTime, toDateTime).seconds)
 
         return TimerModel(
             isOn = isOn,
             time = "%02d:%02d".format(timePrefix, timeSuffix),
-            date = "${now.dayOfMonth}.${now.month}.${now.year}",
+            date = "%02d.%02d.%04d".format(now.dayOfMonth, now.monthValue, now.year),
             total = totalSeconds.toFloat(),
             remaining = remainingSeconds.toFloat()
         )

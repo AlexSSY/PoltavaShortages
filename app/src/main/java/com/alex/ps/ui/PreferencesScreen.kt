@@ -1,4 +1,4 @@
-package com.alex.ps.ui.screens
+package com.alex.ps.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.alex.ps.domain.ThemeSetting
 import com.alex.ps.data.SettingsRepositoryImpl
+import com.alex.ps.domain.SettingsRepository
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 
@@ -17,7 +18,7 @@ import org.koin.compose.koinInject
 fun PreferencesScreen(
     onBack: () -> Unit
 ) {
-    val settingsDataStore: SettingsRepositoryImpl = koinInject<SettingsRepositoryImpl>()
+    val settingsDataStore: SettingsRepository = koinInject<SettingsRepository>()
     val scope = rememberCoroutineScope()
 
     Column(

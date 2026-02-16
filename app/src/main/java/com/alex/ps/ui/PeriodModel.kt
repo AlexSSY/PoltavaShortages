@@ -1,4 +1,4 @@
-package com.alex.ps.ui.model
+package com.alex.ps.ui
 
 data class PeriodModel(
     val from: String,

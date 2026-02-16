@@ -24,7 +24,7 @@ class TimeProviderImpl(
         }
             .stateIn(
                 scope = scope,
-                started = SharingStarted.WhileSubscribed(5000),
+                started = SharingStarted.WhileSubscribed(5_000),
                 initialValue = LocalDateTime.now()
             )
 }

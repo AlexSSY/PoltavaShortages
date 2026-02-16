@@ -1,4 +1,4 @@
-package com.alex.ps.ui.screens
+package com.alex.ps.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,7 +18,6 @@ import com.alex.ps.ui.composables.ExtraInfoWidget
 import com.alex.ps.ui.composables.SummaryWidget
 import com.alex.ps.ui.composables.TimerWidget
 import com.alex.ps.ui.theme.AppTheme
-import com.alex.ps.ui.viewmodels.HomeViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable

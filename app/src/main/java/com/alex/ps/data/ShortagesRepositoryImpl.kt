@@ -10,9 +10,12 @@ import com.alex.ps.domain.ShortagesDiff
 import com.alex.ps.domain.ShortagesRepository
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -22,16 +25,21 @@ import java.time.LocalDateTime
  */
 class ShortagesRepositoryImpl(
     val shortagesDataSource: ShortagesDataSource,
-    val dataStore: DataStore<Preferences>
+    val dataStore: DataStore<Preferences>,
+    scope: CoroutineScope
 ): ShortagesRepository {
     companion object{
         private val SHORTAGES_KEY = stringPreferencesKey("shortages")
     }
 
-    override val shortagesFlow: Flow<Shortages> =
+    override val shortagesFlow: StateFlow<Shortages> =
         dataStore.data.map { prefs ->
             prefs[SHORTAGES_KEY]?.let(::decode) ?: Shortages.default()
-        }
+        }.stateIn(
+            scope,
+            SharingStarted.WhileSubscribed(1_000),
+            Shortages.default()
+        )
 
     private val gson: Gson = GsonBuilder()
         .registerTypeAdapter(LocalDate::class.java, LocalDateAdapter())

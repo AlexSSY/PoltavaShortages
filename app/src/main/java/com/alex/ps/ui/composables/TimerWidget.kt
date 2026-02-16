@@ -9,7 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.alex.ps.ui.model.TimerModel
+import com.alex.ps.ui.TimerModel
 import com.alex.ps.ui.theme.AppTheme
 
 @Composable

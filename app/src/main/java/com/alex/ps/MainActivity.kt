@@ -24,11 +24,12 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.alex.ps.domain.Settings
 import com.alex.ps.data.SettingsRepositoryImpl
+import com.alex.ps.domain.SettingsRepository
 import com.alex.ps.domain.ThemeSetting
 import com.alex.ps.ui.Screen
-import com.alex.ps.ui.screens.HomeScreen
-import com.alex.ps.ui.screens.PreferencesScreen
-import com.alex.ps.ui.screens.TomorrowScheduleScreen
+import com.alex.ps.ui.HomeScreen
+import com.alex.ps.ui.PreferencesScreen
+import com.alex.ps.ui.TomorrowScheduleScreen
 import com.alex.ps.ui.theme.AppTheme
 import org.koin.android.ext.android.get
 
@@ -53,7 +54,7 @@ class MainActivity : ComponentActivity() {
 
             val canGoBack = navController.previousBackStackEntry != null
 
-            val settingsDataStore: SettingsRepositoryImpl = get()
+            val settingsDataStore: SettingsRepository = get()
             val settings by settingsDataStore.settingsFlow.collectAsState(initial = Settings.default())
 
             val isDarkTheme = when(settings.theme) {

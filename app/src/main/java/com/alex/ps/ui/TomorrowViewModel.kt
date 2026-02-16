@@ -1,4 +1,4 @@
-package com.alex.ps.ui.viewmodels
+package com.alex.ps.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,8 +8,6 @@ import com.alex.ps.domain.ShortagesRepository
 import com.alex.ps.domain.Slot
 import com.alex.ps.domain.SlotState
 import com.alex.ps.domain.getBy
-import com.alex.ps.ui.model.SummaryModel
-import com.alex.ps.ui.model.SummaryModelTomorrow
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
