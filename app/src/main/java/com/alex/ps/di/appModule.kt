@@ -2,11 +2,11 @@ package com.alex.ps.di
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import com.alex.ps.data.poe.PoeShortagesDataSource
-import com.alex.ps.data.poe.QueueListParser
-import com.alex.ps.data.poe.ShortagesRepositoryImpl
-import com.alex.ps.data.settings.SettingsDataStore
-import com.alex.ps.data.settings.settingsDataStore
+import com.alex.ps.data.PoeShortagesDataSource
+import com.alex.ps.data.QueueListParser
+import com.alex.ps.data.ShortagesRepositoryImpl
+import com.alex.ps.data.SettingsRepositoryImpl
+import com.alex.ps.data.settingsDataStore
 import com.alex.ps.domain.ShortagesDataSource
 import com.alex.ps.domain.ShortagesRepository
 import com.alex.ps.infrastructure.Notifier
@@ -22,7 +22,7 @@ val appModule = module {
     }
 
     single {
-        SettingsDataStore(dataStore = get())
+        SettingsRepositoryImpl(dataStore = get())
     }
 
     single {

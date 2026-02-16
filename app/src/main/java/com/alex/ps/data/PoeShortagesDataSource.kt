@@ -1,4 +1,4 @@
-package com.alex.ps.data.poe
+package com.alex.ps.data
 
 import com.alex.ps.domain.Shortages
 import com.alex.ps.domain.ShortagesDataSource

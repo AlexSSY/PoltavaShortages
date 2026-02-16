@@ -1,6 +1,6 @@
 package com.alex.ps
 
-import com.alex.ps.data.poe.QueueListParser
+import com.alex.ps.data.QueueListParser
 import com.alex.ps.domain.Schedule
 import com.alex.ps.domain.Slot
 import com.alex.ps.domain.SlotState

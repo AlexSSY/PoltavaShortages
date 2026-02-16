@@ -1,4 +1,4 @@
-package com.alex.ps.data.settings
+package com.alex.ps.domain
 
 enum class LanguageSetting {
     SYSTEM,

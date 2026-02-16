@@ -1,4 +1,4 @@
-package com.alex.ps.data.settings
+package com.alex.ps.data
 
 import android.content.Context
 import androidx.datastore.core.DataStore

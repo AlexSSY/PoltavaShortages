@@ -1,16 +1,21 @@
-package com.alex.ps.data.settings
+package com.alex.ps.data
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.alex.ps.domain.LanguageSetting
+import com.alex.ps.domain.QueueKey
+import com.alex.ps.domain.Settings
+import com.alex.ps.domain.SettingsRepository
+import com.alex.ps.domain.ThemeSetting
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class SettingsDataStore(
+class SettingsRepositoryImpl(
     private val dataStore: DataStore<Preferences>
-) {
+): SettingsRepository {
     companion object {
         private val THEME = stringPreferencesKey("theme")
         private val LANGUAGE = stringPreferencesKey("language")
@@ -18,7 +23,7 @@ class SettingsDataStore(
         private val QUEUE_MINOR = intPreferencesKey("queue_minor")
     }
 
-    val settingsFlow: Flow<Settings> =
+    override val settingsFlow: Flow<Settings> =
         dataStore.data.map { prefs ->
 
             val theme = prefs[THEME]
@@ -42,15 +47,15 @@ class SettingsDataStore(
             )
         }
 
-    suspend fun setTheme(theme: ThemeSetting) {
+    override suspend fun setTheme(theme: ThemeSetting) {
         dataStore.edit { it[THEME] = theme.name }
     }
 
-    suspend fun setLanguage(language: LanguageSetting) {
+    override suspend fun setLanguage(language: LanguageSetting) {
         dataStore.edit { it[LANGUAGE] = language.name }
     }
 
-    suspend fun setQueue(queue: QueueKey) {
+    override suspend fun setQueue(queue: QueueKey) {
         dataStore.edit { prefs ->
             prefs[QUEUE_MAJOR] = queue.major
             prefs[QUEUE_MINOR] = queue.minor

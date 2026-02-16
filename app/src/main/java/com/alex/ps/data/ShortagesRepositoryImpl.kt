@@ -1,4 +1,4 @@
-package com.alex.ps.data.poe
+package com.alex.ps.data
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences

@@ -1,4 +1,6 @@
-package com.alex.ps.data.settings
+package com.alex.ps.domain
+
+import com.alex.ps.domain.ThemeSetting
 
 data class Settings(
     val theme: ThemeSetting,
@@ -6,10 +8,10 @@ data class Settings(
     val selectedQueue: QueueKey
 ) {
     companion object {
-        fun default(): Settings  = Settings(
+        fun default(): Settings = Settings(
             ThemeSetting.SYSTEM,
             LanguageSetting.EN,
-            QueueKey(1, 1)
+            QueueKey(1, 2)
         )
     }
 }

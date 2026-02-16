@@ -1,6 +1,6 @@
 package com.alex.ps.domain
 //
-//import com.alex.ps.data.settings.Settings
+//import com.alex.ps.domain.Settings
 //import com.alex.ps.infrastructure.Notifier
 //
 //class CompareAndNotifyUseCase(

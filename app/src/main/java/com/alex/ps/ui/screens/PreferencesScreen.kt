@@ -8,8 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.alex.ps.data.settings.ThemeSetting
-import com.alex.ps.data.settings.SettingsDataStore
+import com.alex.ps.domain.ThemeSetting
+import com.alex.ps.data.SettingsRepositoryImpl
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 
@@ -17,7 +17,7 @@ import org.koin.compose.koinInject
 fun PreferencesScreen(
     onBack: () -> Unit
 ) {
-    val settingsDataStore: SettingsDataStore = koinInject<SettingsDataStore>()
+    val settingsDataStore: SettingsRepositoryImpl = koinInject<SettingsRepositoryImpl>()
     val scope = rememberCoroutineScope()
 
     Column(

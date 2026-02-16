@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.alex.ps.data.settings.LanguageSetting
+import com.alex.ps.domain.LanguageSetting
 import com.alex.ps.ui.theme.AppTheme
 
 @Composable

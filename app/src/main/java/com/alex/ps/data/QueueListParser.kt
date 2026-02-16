@@ -1,4 +1,4 @@
-package com.alex.ps.data.poe
+package com.alex.ps.data
 
 import com.alex.ps.domain.Queue
 import com.alex.ps.domain.Slot

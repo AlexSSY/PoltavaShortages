@@ -17,21 +17,19 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.alex.ps.data.poe.PoeShortagesDataSource
-import com.alex.ps.data.settings.Settings
-import com.alex.ps.data.settings.SettingsDataStore
+import com.alex.ps.domain.Settings
+import com.alex.ps.data.SettingsRepositoryImpl
+import com.alex.ps.domain.ThemeSetting
 import com.alex.ps.ui.Screen
 import com.alex.ps.ui.screens.HomeScreen
 import com.alex.ps.ui.screens.PreferencesScreen
 import com.alex.ps.ui.screens.TomorrowScheduleScreen
 import com.alex.ps.ui.theme.AppTheme
-import kotlinx.coroutines.launch
 import org.koin.android.ext.android.get
 
 class MainActivity : ComponentActivity() {
@@ -55,13 +53,13 @@ class MainActivity : ComponentActivity() {
 
             val canGoBack = navController.previousBackStackEntry != null
 
-            val settingsDataStore: SettingsDataStore = get()
+            val settingsDataStore: SettingsRepositoryImpl = get()
             val settings by settingsDataStore.settingsFlow.collectAsState(initial = Settings.default())
 
             val isDarkTheme = when(settings.theme) {
-                com.alex.ps.data.settings.ThemeSetting.DARK -> true
-                com.alex.ps.data.settings.ThemeSetting.LIGHT -> false
-                com.alex.ps.data.settings.ThemeSetting.SYSTEM -> isSystemInDarkTheme()
+                ThemeSetting.DARK -> true
+                ThemeSetting.LIGHT -> false
+                ThemeSetting.SYSTEM -> isSystemInDarkTheme()
             }
 
             AppTheme(isDarkTheme) {

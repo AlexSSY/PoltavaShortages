@@ -2,7 +2,7 @@ package com.alex.ps.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.alex.ps.data.settings.SettingsDataStore
+import com.alex.ps.data.SettingsRepositoryImpl
 import com.alex.ps.domain.Queue
 import com.alex.ps.domain.Shortages
 import com.alex.ps.domain.ShortagesRepository
@@ -11,7 +11,6 @@ import com.alex.ps.domain.SlotState
 import com.alex.ps.domain.getBy
 import com.alex.ps.ui.composables.TimePeriodPresentation
 import com.alex.ps.ui.composables.TimePeriodPresentationState
-import com.alex.ps.ui.model.PeriodModel
 import com.alex.ps.ui.model.SummaryModel
 import com.alex.ps.ui.model.TimerModel
 import kotlinx.coroutines.delay
@@ -28,7 +27,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 
 class HomeViewModel(
-    settingsDataStore: SettingsDataStore,
+    settingsDataStore: SettingsRepositoryImpl,
     shortagesRepository: ShortagesRepository
 ): ViewModel() {
     private val nowTimeStateFlow: Flow<LocalDateTime> = flow {

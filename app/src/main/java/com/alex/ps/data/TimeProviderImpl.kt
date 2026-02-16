@@ -1,12 +1,14 @@
-package com.alex.ps.data.poe
+package com.alex.ps.data
 
 import com.alex.ps.domain.TimeProvider
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.isActive
 import java.time.LocalDateTime
 
 class TimeProviderImpl(
@@ -15,9 +17,9 @@ class TimeProviderImpl(
 
     override val timeFlow: StateFlow<LocalDateTime> =
         flow {
-            while (true) {
+            while (currentCoroutineContext().isActive) {
                 emit(LocalDateTime.now())
-                delay(1000)
+                delay(1_000)
             }
         }
             .stateIn(

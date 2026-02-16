@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.alex.ps.data.settings.ThemeSetting
+import com.alex.ps.domain.ThemeSetting
 
 @Composable
 fun ThemeSection(

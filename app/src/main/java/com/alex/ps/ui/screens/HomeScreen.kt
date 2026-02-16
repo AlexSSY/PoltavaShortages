@@ -2,7 +2,6 @@ package com.alex.ps.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,20 +10,13 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.alex.ps.data.settings.SettingsDataStore
 import com.alex.ps.ui.composables.ElectricityAvailableWidget
 import com.alex.ps.ui.composables.ExtraInfoWidget
 import com.alex.ps.ui.composables.SummaryWidget
-import com.alex.ps.ui.composables.TimePeriodPresentation
-import com.alex.ps.ui.composables.TimePeriodPresentationState
 import com.alex.ps.ui.composables.TimerWidget
-import com.alex.ps.ui.composables.ToastWidget
 import com.alex.ps.ui.theme.AppTheme
 import com.alex.ps.ui.viewmodels.HomeViewModel
 import org.koin.androidx.compose.koinViewModel

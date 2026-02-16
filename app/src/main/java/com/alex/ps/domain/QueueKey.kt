@@ -1,4 +1,4 @@
-package com.alex.ps.data.settings
+package com.alex.ps.domain
 
 data class QueueKey(
     val major: Int,

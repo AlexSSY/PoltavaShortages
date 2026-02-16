@@ -1,4 +1,4 @@
-package com.alex.ps.data.poe
+package com.alex.ps.data
 
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
@@ -7,13 +7,13 @@ import com.google.gson.JsonPrimitive
 import com.google.gson.JsonSerializationContext
 import com.google.gson.JsonSerializer
 import java.lang.reflect.Type
-import java.time.LocalDateTime
+import java.time.LocalDate
 
-class LocalDateTimeAdapter : JsonSerializer<LocalDateTime>,
-    JsonDeserializer<LocalDateTime> {
+class LocalDateAdapter : JsonSerializer<LocalDate>,
+    JsonDeserializer<LocalDate> {
 
     override fun serialize(
-        src: LocalDateTime?,
+        src: LocalDate?,
         typeOfSrc: Type?,
         context: JsonSerializationContext?
     ): JsonElement {
@@ -24,7 +24,8 @@ class LocalDateTimeAdapter : JsonSerializer<LocalDateTime>,
         json: JsonElement?,
         typeOfT: Type?,
         context: JsonDeserializationContext?
-    ): LocalDateTime {
-        return LocalDateTime.parse(json?.asString)
+    ): LocalDate {
+        return LocalDate.parse(json?.asString)
     }
 }
+
