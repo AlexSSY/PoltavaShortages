@@ -31,8 +31,11 @@ class TomorrowViewModel(
         )
 
     private val activeQueue: StateFlow<Queue> =
-        shortages.map { it.queues.getBy(1,2) }
-            .stateIn(viewModelScope, sharing, Queue.default())
+        shortages.map {
+            it.queues.getBy(1,2)
+        }.stateIn(
+            viewModelScope, sharing, Queue.default()
+        )
 
     private val todayDate: StateFlow<LocalDate> = flow {
         while (true) {
