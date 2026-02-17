@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.alex.ps.ui.composables.ElectricityAvailableWidget
 import com.alex.ps.ui.composables.SummaryDonutChart
 import org.koin.androidx.compose.koinViewModel
 
@@ -21,11 +22,12 @@ fun TomorrowScheduleScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         SummaryDonutChart(
-//            negativeValue = -18.5f,
-//            positiveValue = 5.5f,
-            negativeValue = -summaryModelState.value.redHours,
+            negativeValue = summaryModelState.value.redHours,
             positiveValue = summaryModelState.value.greenHours,
             date = "30.01.2026"
+        )
+        ElectricityAvailableWidget(
+            periods = periods.value
         )
     }
 }

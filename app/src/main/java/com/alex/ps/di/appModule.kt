@@ -12,6 +12,7 @@ import com.alex.ps.domain.QueueProvider
 import com.alex.ps.domain.SettingsRepository
 import com.alex.ps.domain.ShortagesDataSource
 import com.alex.ps.domain.ShortagesRepository
+import com.alex.ps.domain.TimePeriodsWithStateUseCase
 import com.alex.ps.domain.TimeProvider
 import com.alex.ps.infrastructure.Notifier
 import com.alex.ps.ui.HomeViewModel
@@ -82,7 +83,8 @@ val appModule = module {
 
     viewModel {
         TomorrowViewModel(
-            shortagesRepository = get()
+            queueProvider = get(),
+            timeProvider = get()
         )
     }
 

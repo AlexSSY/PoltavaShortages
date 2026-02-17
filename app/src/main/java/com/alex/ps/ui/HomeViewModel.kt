@@ -9,6 +9,7 @@ import com.alex.ps.domain.Shortages
 import com.alex.ps.domain.ShortagesRepository
 import com.alex.ps.domain.Slot
 import com.alex.ps.domain.SlotState
+import com.alex.ps.domain.TimePeriodsWithStateUseCase
 import com.alex.ps.domain.TimeProvider
 import com.alex.ps.domain.getBy
 import com.alex.ps.ui.composables.TimePeriodPresentation
@@ -71,6 +72,8 @@ class HomeViewModel(
             SharingStarted.WhileSubscribed(1_000),
             SummaryModel.default()
         )
+
+    private val timePeriodsWithStateUseCase = TimePeriodsWithStateUseCase()
 
     val periodsModelStateFlow: StateFlow<List<TimePeriodPresentation>> =
         combine(

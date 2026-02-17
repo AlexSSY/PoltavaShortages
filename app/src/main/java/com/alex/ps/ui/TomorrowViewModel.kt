@@ -3,11 +3,14 @@ package com.alex.ps.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alex.ps.domain.Queue
+import com.alex.ps.domain.QueueProvider
 import com.alex.ps.domain.Shortages
 import com.alex.ps.domain.ShortagesRepository
 import com.alex.ps.domain.Slot
 import com.alex.ps.domain.SlotState
+import com.alex.ps.domain.TimeProvider
 import com.alex.ps.domain.getBy
+import com.alex.ps.ui.composables.TimePeriodPresentation
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -18,35 +21,18 @@ import kotlinx.coroutines.flow.stateIn
 import java.time.LocalDate
 
 class TomorrowViewModel(
-    shortagesRepository: ShortagesRepository
+    queueProvider: QueueProvider,
+    timeProvider: TimeProvider
 ): ViewModel() {
     private val sharing
         get() = SharingStarted.WhileSubscribed(1_000)
 
-    private val shortages: StateFlow<Shortages> =
-        shortagesRepository.shortagesFlow.stateIn(
-            viewModelScope, sharing, Shortages.default()
-        )
-
-    private val activeQueue: StateFlow<Queue> =
-        shortages.map {
-            it.queues.getBy(1,2)
-        }.stateIn(
-            viewModelScope, sharing, Queue.default()
-        )
-
-    private val todayDate: StateFlow<LocalDate> = flow {
-        while (true) {
-            emit(LocalDate.now())
-            delay(1_000)
-        }
-    }.stateIn(
-        viewModelScope, sharing, LocalDate.now()
-    )
-
     private val tomorrowSlots: StateFlow<List<Slot>> =
-        combine(todayDate, activeQueue) { date, queue ->
-            queue.slots.filter { it.date == todayDate }
+        combine(
+            timeProvider.timeFlow,
+            queueProvider.queueFlow
+        ) { time, queue ->
+            queue.slots.filter { it.date == time.toLocalDate() }
         }.stateIn(
             viewModelScope, sharing, emptyList()
         )
@@ -63,5 +49,17 @@ class TomorrowViewModel(
             )
         }.stateIn(
             viewModelScope, sharing, SummaryModelTomorrow.default()
+        )
+
+    val periodsModelStateFlow: StateFlow<List<TimePeriodPresentation>> =
+        combine(
+            timeProvider.timeFlow,
+            queueProvider.queueFlow
+        ) { nowTime, queue ->
+            calcPeriods(nowTime, queue)
+        }.stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(1_000),
+            emptyList()
         )
 }
