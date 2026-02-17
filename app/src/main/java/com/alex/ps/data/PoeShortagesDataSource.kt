@@ -20,11 +20,11 @@ class PoeShortagesDataSource(
         val rawExtra = downloadUrl(GAV_URL)
         val gavHtml = downloadUrl(SLOTS_URL)
 
-        Shortages(
-            isGav = rawExtra.contains("ГАВ"),
-            isSpecGav = rawExtra.contains("СГАВ"),
-            queues = queueListParser.parse(gavHtml)
-        )
+        val isGav = rawExtra.contains("ГАВ")
+        val isSpecGav = rawExtra.contains("СГАВ")
+        val queues = queueListParser.parse(gavHtml)
+
+        Shortages(isGav, isSpecGav, queues)
     }
 
     private fun downloadUrl(url: String): String {

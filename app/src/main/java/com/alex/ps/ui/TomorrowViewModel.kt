@@ -56,7 +56,7 @@ class TomorrowViewModel(
             timeProvider.timeFlow,
             queueProvider.queueFlow
         ) { nowTime, queue ->
-            calcPeriods(nowTime, queue)
+            queue.happyPeriods.toPresentation(nowTime)
         }.stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(1_000),

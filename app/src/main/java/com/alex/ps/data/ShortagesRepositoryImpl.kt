@@ -1,5 +1,6 @@
 package com.alex.ps.data
 
+import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -53,9 +54,12 @@ class ShortagesRepositoryImpl(
     }
 
     override suspend fun refresh(): ShortagesDiff {
-        val freshShortages = runCatching {
+        val freshShortages = try {
             shortagesDataSource.getShortages()
-        }.getOrNull()
+        } catch (e: Exception) {
+            Log.e("Poe Repositry", "Failed to refresh", e)
+            null
+        }
 
         freshShortages?.let {
             save(it)

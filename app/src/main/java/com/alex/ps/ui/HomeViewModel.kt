@@ -73,14 +73,12 @@ class HomeViewModel(
             SummaryModel.default()
         )
 
-    private val timePeriodsWithStateUseCase = TimePeriodsWithStateUseCase()
-
     val periodsModelStateFlow: StateFlow<List<TimePeriodPresentation>> =
         combine(
             timeProvider.timeFlow,
             queueProvider.queueFlow
         ) { nowTime, queue ->
-            calcPeriods(nowTime, queue)
+            queue.happyPeriods.toPresentation(nowTime)
         }.stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(1_000),
@@ -105,26 +103,6 @@ class HomeViewModel(
             SharingStarted.WhileSubscribed(1_000),
             emptyList()
         )
-
-    private fun calcPeriods(nowTime: LocalDateTime, queue: Queue): List<TimePeriodPresentation> {
-        return queue.happyPeriods.filter {
-            it.start.dayOfMonth == nowTime.dayOfMonth
-        }.map { timePeriod ->
-            val state = if (timePeriod.contains(nowTime))
-                TimePeriodPresentationState.ACTIVE
-            else if (timePeriod.end < nowTime)
-                TimePeriodPresentationState.PAST
-            else
-                TimePeriodPresentationState.SOON
-
-            TimePeriodPresentation(
-                start = "${timePeriod.start.hour}:${timePeriod.start.minute}",
-                end = "${timePeriod.end.hour}:${timePeriod.end.minute}",
-                duration = "${timePeriod.durationInMinutes / 60F} hours",
-                state = state
-            )
-        }
-    }
 
     init {
         viewModelScope.launch {
