@@ -127,7 +127,7 @@ class HomeViewModel(
 
         val prevSlotStateToFind = when(currentSlot.state) {
             SlotState.RED -> SlotState.GREEN
-            SlotState.GREEN -> SlotState.RED
+            SlotState.GREEN -> SlotState.YELLOW
             SlotState.YELLOW -> SlotState.RED
         }
 
@@ -157,7 +157,10 @@ class HomeViewModel(
             }
         }
 
-        val fromDateTime = prevSlot?.end ?: slots.first().start
+//        val fromDateTime = prevSlot?.end ?: slots.first().start
+        val fromDateTime = prevSlot?.let {
+            if (it.state == SlotState.YELLOW) it.start else it.end
+        } ?: slots.first().start
         val toDateTime = nextSlot?.start ?: slots.last().end
         val remainingSeconds = max(0, Duration.between(now, toDateTime).seconds)
 

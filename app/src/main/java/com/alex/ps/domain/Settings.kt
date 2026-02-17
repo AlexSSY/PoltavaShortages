@@ -11,7 +11,7 @@ data class Settings(
         fun default(): Settings = Settings(
             ThemeSetting.SYSTEM,
             LanguageSetting.EN,
-            QueueKey(1, 2)
+            QueueKey.default()
         )
     }
 }

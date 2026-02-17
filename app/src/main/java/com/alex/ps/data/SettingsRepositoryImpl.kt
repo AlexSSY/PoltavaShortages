@@ -38,7 +38,7 @@ class SettingsRepositoryImpl(
                 prefs[QUEUE_MINOR]?.let { minor ->
                     QueueKey(major, minor)
                 }
-            } ?: QueueKey(1, 1)
+            } ?: QueueKey.default()
 
             Settings(
                 theme = theme,
