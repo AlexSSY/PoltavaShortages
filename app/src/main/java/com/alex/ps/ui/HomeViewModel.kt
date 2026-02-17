@@ -1,5 +1,6 @@
 package com.alex.ps.ui
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alex.ps.data.SettingsRepositoryImpl
@@ -16,8 +17,10 @@ import com.alex.ps.ui.composables.TimePeriodPresentation
 import com.alex.ps.ui.composables.TimePeriodPresentationState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
@@ -29,7 +32,7 @@ import java.time.LocalDateTime
 import kotlin.math.max
 
 class HomeViewModel(
-    shortagesRepository: ShortagesRepository,
+    val shortagesRepository: ShortagesRepository,
     timeProvider: TimeProvider,
     queueProvider: QueueProvider
 ): ViewModel() {
@@ -104,10 +107,31 @@ class HomeViewModel(
             emptyList()
         )
 
-    init {
+    val tomorrowSlotsAvailableFlow: StateFlow<Boolean> =
+        combine(
+            queueProvider.queueFlow,
+            timeProvider.timeFlow
+        ) { queue, time ->
+            queue.slots.any { it.date == time.plusDays(1).toLocalDate() }
+        }.stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(1_000),
+            false
+        )
+
+    private val isRefreshing = MutableStateFlow(false)
+    val isRefreshingFlow = isRefreshing.asStateFlow()
+
+    fun refresh() {
         viewModelScope.launch {
+            isRefreshing.value = true
             shortagesRepository.refresh()
+            isRefreshing.value = false
         }
+    }
+
+    init {
+        refresh()
     }
 
     private fun calcTimerState(

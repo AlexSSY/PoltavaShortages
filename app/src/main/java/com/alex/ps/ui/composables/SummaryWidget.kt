@@ -35,15 +35,15 @@ fun SummaryWidget(
             style = AppTheme.typography.labelMedium
         )
         Row(
-            horizontalArrangement = Arrangement.spacedBy(4.dp)
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text(
-                text = summaryModel.redHours,
+                text = "-" + summaryModel.redHours,
                 style = AppTheme.typography.labelMedium,
                 color = AppTheme.colorScheme.error
             )
             Text(
-                text = summaryModel.greenHours,
+                text = "+" + summaryModel.greenHours,
                 style = AppTheme.typography.labelMedium,
                 color = AppTheme.colorScheme.primary
             )

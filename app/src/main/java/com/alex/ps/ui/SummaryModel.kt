@@ -6,7 +6,7 @@ data class SummaryModel(
 ) {
     companion object {
         fun default(): SummaryModel {
-            return SummaryModel("0", "24")
+            return SummaryModel("-0", "+24")
         }
     }
 }

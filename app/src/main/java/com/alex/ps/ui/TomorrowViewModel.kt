@@ -32,7 +32,7 @@ class TomorrowViewModel(
             timeProvider.timeFlow,
             queueProvider.queueFlow
         ) { time, queue ->
-            queue.slots.filter { it.date == time.toLocalDate() }
+            queue.slots.filter { it.date == time.plusDays(1).toLocalDate() }
         }.stateIn(
             viewModelScope, sharing, emptyList()
         )
@@ -56,7 +56,11 @@ class TomorrowViewModel(
             timeProvider.timeFlow,
             queueProvider.queueFlow
         ) { nowTime, queue ->
-            queue.happyPeriods.toPresentation(nowTime)
+            val tomorrowStartOfDay = nowTime
+                .toLocalDate()
+                .atStartOfDay()
+                .plusDays(1)
+            queue.happyPeriods.toPresentation(tomorrowStartOfDay)
         }.stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(1_000),
