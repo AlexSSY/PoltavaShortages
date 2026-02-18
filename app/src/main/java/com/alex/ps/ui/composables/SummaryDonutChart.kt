@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -28,7 +29,9 @@ fun SummaryDonutChart(
     modifier: Modifier = Modifier,
     negativeValue: Float,
     positiveValue: Float,
-    date: String
+    date: String,
+    redColor: Color,
+    greenColor: Color
 ) {
     val total = abs(negativeValue) + positiveValue
     val negativeSweep = (abs(negativeValue) / total) * 360f
@@ -41,11 +44,11 @@ fun SummaryDonutChart(
 
         Canvas(
             modifier = Modifier
-                .size(260.dp)
+                .size(220.dp)
         ) {
 
-            val strokeWidth = 40.dp.toPx()
-            val diameter = size.minDimension
+            val strokeWidth = 30.dp.toPx()
+            val diameter = size.minDimension - strokeWidth
             val topLeft = Offset(
                 (size.width - diameter) / 2,
                 (size.height - diameter) / 2
@@ -65,7 +68,7 @@ fun SummaryDonutChart(
 
             // Красный сегмент
             drawArc(
-                color = Color(0xFF7B3F3F),
+                color = redColor,
                 startAngle = -90f,
                 sweepAngle = negativeSweep,
                 useCenter = false,
@@ -76,7 +79,7 @@ fun SummaryDonutChart(
 
             // Зелёный сегмент
             drawArc(
-                color = Color(0xFF2E7D32),
+                color = greenColor,
                 startAngle = -90f + negativeSweep,
                 sweepAngle = positiveSweep,
                 useCenter = false,
@@ -91,17 +94,15 @@ fun SummaryDonutChart(
 
             Row {
                 Text(
-                    text = String.format("%.1f", negativeValue),
-                    color = Color.Red,
-                    fontSize = 22.sp,
-                    fontWeight = FontWeight.Bold
+                    text = "-" + String.format("%.1f", negativeValue),
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.titleMedium
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = "+" + String.format("%.1f", positiveValue),
-                    color = Color.Green,
-                    fontSize = 22.sp,
-                    fontWeight = FontWeight.Bold
+                    color = MaterialTheme.colorScheme.primary,
+                    style = MaterialTheme.typography.titleMedium
                 )
             }
 
@@ -109,8 +110,8 @@ fun SummaryDonutChart(
 
             Text(
                 text = date,
-                color = Color.Gray,
-                fontSize = 14.sp
+                color = MaterialTheme.colorScheme.onBackground,
+                style = MaterialTheme.typography.bodyMedium
             )
         }
     }

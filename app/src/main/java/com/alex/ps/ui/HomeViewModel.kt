@@ -35,7 +35,7 @@ class HomeViewModel(
     val shortagesRepository: ShortagesRepository,
     timeProvider: TimeProvider,
     queueProvider: QueueProvider
-): ViewModel() {
+) : ViewModel() {
     val timerModelFlow: StateFlow<TimerModel> =
         combine(
             timeProvider.timeFlow,
@@ -58,6 +58,15 @@ class HomeViewModel(
             viewModelScope,
             started = SharingStarted.WhileSubscribed(1_000),
             initialValue = emptyList()
+        )
+
+    val slotsAvailable: StateFlow<Boolean> =
+        queueProvider.queueFlow.map { queue ->
+            queue.slots.size == 48
+        }.stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(1_000),
+            false
         )
 
     val summaryModelFlow: StateFlow<SummaryModel> =
@@ -149,13 +158,13 @@ class HomeViewModel(
         var prevSlot: Slot? = null
         var nextSlot: Slot? = null
 
-        val prevSlotStateToFind = when(currentSlot.state) {
+        val prevSlotStateToFind = when (currentSlot.state) {
             SlotState.RED -> SlotState.GREEN
             SlotState.GREEN -> SlotState.YELLOW
             SlotState.YELLOW -> SlotState.RED
         }
 
-        val nextSlotStateToFind = when(currentSlot.state) {
+        val nextSlotStateToFind = when (currentSlot.state) {
             SlotState.RED -> SlotState.YELLOW
             SlotState.GREEN -> SlotState.RED
             SlotState.YELLOW -> SlotState.RED
@@ -206,8 +215,8 @@ class HomeViewModel(
 
         return TimerModel(
             isOn = isOn,
-            time = "%02d:%02d".format(timePrefix, timeSuffix),
-            date = "%02d.%02d.%04d".format(now.dayOfMonth, now.monthValue, now.year),
+            time = formatTime(timePrefix, timeSuffix),
+            date = formatDate(now.dayOfMonth, now.monthValue, now.year),
             total = totalSeconds.toFloat(),
             remaining = remainingSeconds.toFloat()
         )

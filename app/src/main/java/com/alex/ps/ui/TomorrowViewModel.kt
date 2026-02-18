@@ -66,4 +66,9 @@ class TomorrowViewModel(
             SharingStarted.WhileSubscribed(1_000),
             emptyList()
         )
+
+    val tomorrowDateFlow: StateFlow<LocalDate> =
+        timeProvider.timeFlow.map { it.plusDays(1).toLocalDate() }.stateIn(
+            viewModelScope, sharing, LocalDate.now()
+        )
 }

@@ -10,7 +10,7 @@ data class Settings(
     companion object {
         fun default(): Settings = Settings(
             ThemeSetting.SYSTEM,
-            LanguageSetting.EN,
+            LanguageSetting.UA,
             QueueKey.default()
         )
     }

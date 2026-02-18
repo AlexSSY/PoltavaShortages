@@ -1,6 +1,7 @@
 package com.alex.ps.ui
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
@@ -35,52 +37,62 @@ fun HomeScreen(
     val extraState = homeViewModel.extraInfoStateFlow.collectAsState()
     val tomorrowSlotsAvailable = homeViewModel.tomorrowSlotsAvailableFlow.collectAsState()
     val isRefreshing = homeViewModel.isRefreshingFlow.collectAsState()
+    val slotsAvailable = homeViewModel.slotsAvailable.collectAsState()
 
-    PullToRefreshBox(
-        isRefreshing = isRefreshing.value,
-        onRefresh = { homeViewModel.refresh() },
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(
-                    vertical = 24.dp,
-                    horizontal = 58.dp
-                )
-                .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(32.dp)
+    if (slotsAvailable.value) {
+        PullToRefreshBox(
+            isRefreshing = isRefreshing.value,
+            onRefresh = { homeViewModel.refresh() },
         ) {
-            TimerWidget(
-                radius = 96.dp,
-                timerModel = timerModelState.value
-            )
-            ExtraInfoWidget(
-                extra = extraState.value
-            )
-            SummaryWidget(
-                summaryModel = summaryModelState.value
-            )
-            ElectricityAvailableWidget(
-                periods = periods.value
-            )
-            if (tomorrowSlotsAvailable.value) {
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = AppTheme.shape.medium,
-                    contentPadding = PaddingValues(
-                        horizontal = 0.dp,
-                        vertical = 6.dp
-                    ),
-                    onClick = onClickTomorrowScheduleLink
-                ) {
-                    Text(
-                        text = "Tomorrow Schedule",
-                        style = AppTheme.typography.bodyMedium,
-                        color = AppTheme.colorScheme.onPrimary
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(
+                        vertical = 24.dp,
+                        horizontal = 58.dp
                     )
+                    .verticalScroll(rememberScrollState()),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(32.dp)
+            ) {
+                TimerWidget(
+                    radius = 96.dp,
+                    timerModel = timerModelState.value
+                )
+                ExtraInfoWidget(
+                    extra = extraState.value
+                )
+                SummaryWidget(
+                    summaryModel = summaryModelState.value
+                )
+                ElectricityAvailableWidget(
+                    periods = periods.value
+                )
+                if (tomorrowSlotsAvailable.value) {
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = AppTheme.shape.medium,
+                        contentPadding = PaddingValues(
+                            horizontal = 0.dp,
+                            vertical = 6.dp
+                        ),
+                        onClick = onClickTomorrowScheduleLink
+                    ) {
+                        Text(
+                            text = "Tomorrow Schedule",
+                            style = AppTheme.typography.bodyMedium,
+                            color = AppTheme.colorScheme.onPrimary
+                        )
+                    }
                 }
             }
+        }
+    } else {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator()
         }
     }
 }
