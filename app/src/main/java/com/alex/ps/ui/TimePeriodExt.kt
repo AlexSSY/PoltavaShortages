@@ -17,8 +17,8 @@ fun List<TimePeriod>.toPresentation(nowTime: LocalDateTime): List<TimePeriodPres
             TimePeriodPresentationState.SOON
 
         TimePeriodPresentation(
-            start = "${timePeriod.start.hour}:${timePeriod.start.minute}",
-            end = "${timePeriod.end.hour}:${timePeriod.end.minute}",
+            start = "%02d.%02d".format(timePeriod.start.hour, timePeriod.start.minute),
+            end = "%02d.%02d".format(timePeriod.end.hour, timePeriod.end.minute),
             duration = "${timePeriod.durationInMinutes / 60F} hours",
             state = state
         )

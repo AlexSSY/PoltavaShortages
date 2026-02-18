@@ -49,7 +49,7 @@ fun HomeScreen(
                 )
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(27.dp)
+            verticalArrangement = Arrangement.spacedBy(32.dp)
         ) {
             TimerWidget(
                 radius = 96.dp,
@@ -76,7 +76,7 @@ fun HomeScreen(
                 ) {
                     Text(
                         text = "Tomorrow Schedule",
-                        style = AppTheme.typography.labelMedium,
+                        style = AppTheme.typography.bodyMedium,
                         color = AppTheme.colorScheme.onPrimary
                     )
                 }

@@ -51,7 +51,7 @@ fun TimerWidget(
             Text(
                 text = timerModel.date,
                 color = AppTheme.colorScheme.onSecondary,
-                style = AppTheme.typography.labelSmall
+                style = AppTheme.typography.bodyMedium
             )
         }
     }

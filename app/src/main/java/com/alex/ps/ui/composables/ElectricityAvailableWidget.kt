@@ -44,7 +44,7 @@ fun ElectricityAvailableWidget(
     ) {
         Text(
             text = "Electricity available periods",
-            style = AppTheme.typography.labelMedium
+            style = AppTheme.typography.titleSmall
         )
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -95,18 +95,18 @@ fun ElectricityAvailableWidget(
                     ) {
                         Text(
                             text = period.start,
-                            style = AppTheme.typography.labelMedium,
+                            style = AppTheme.typography.bodyMedium,
                             color = textColor
                         )
                         Text(
                             text = period.duration,
-                            style = AppTheme.typography.labelMedium,
+                            style = AppTheme.typography.bodyMedium,
                             fontStyle = FontStyle.Italic,
                             color = textColor
                         )
                         Text(
                             text = period.end,
-                            style = AppTheme.typography.labelMedium,
+                            style = AppTheme.typography.bodyMedium,
                             color = textColor
                         )
                     }
