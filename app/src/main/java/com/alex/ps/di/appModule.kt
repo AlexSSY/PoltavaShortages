@@ -38,7 +38,10 @@ val appModule = module {
     }
 
     single<SettingsRepository> {
-        SettingsRepositoryImpl(dataStore = get())
+        SettingsRepositoryImpl(
+            dataStore = get(),
+            scope = get(named("AppScope"))
+        )
     }
 
     single {

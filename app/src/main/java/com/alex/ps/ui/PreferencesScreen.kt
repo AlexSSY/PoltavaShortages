@@ -1,15 +1,22 @@
 package com.alex.ps.ui
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.unit.dp
 import com.alex.ps.domain.ThemeSetting
-import com.alex.ps.data.SettingsRepositoryImpl
 import com.alex.ps.domain.SettingsRepository
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
@@ -18,37 +25,55 @@ import org.koin.compose.koinInject
 fun PreferencesScreen(
     onBack: () -> Unit
 ) {
-    val settingsDataStore: SettingsRepository = koinInject<SettingsRepository>()
+    val settingsRepository: SettingsRepository = koinInject<SettingsRepository>()
+    val currentSettings = settingsRepository.settingsFlow.collectAsState()
     val scope = rememberCoroutineScope()
 
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Preferences Screen")
-        Button(onClick = {
-            scope.launch {
-                settingsDataStore.setTheme(ThemeSetting.SYSTEM)
+        PreferencesScreenItem(name = "Theme") {
+            Text(
+                modifier = Modifier
+                    .clickable(
+                        onClick = {}
+                    ),
+                text = currentSettings.value.theme.name,
+                textDecoration = TextDecoration.Underline
+            )
+        }
+        PreferencesScreenItem(name = "Queue") {
+            Button(onClick = {}) {
+                Text(
+                    text = "%d.%d".format(
+                    currentSettings.value.selectedQueue.major,
+                    currentSettings.value.selectedQueue.minor)
+                )
             }
-        }) {
-            Text(text = "System")
         }
-        Button(onClick = {
-            scope.launch {
-                settingsDataStore.setTheme(ThemeSetting.DARK)
+        PreferencesScreenItem(name = "Language") {
+            Button(onClick = {}) {
+                Text(text = currentSettings.value.language.name)
             }
-        }) {
-            Text(text = "Dark")
         }
-        Button(onClick = {
-            scope.launch {
-                settingsDataStore.setTheme(ThemeSetting.LIGHT)
-            }
-        }) {
-            Text(text = "Light")
-        }
-        Button(onClick = onBack) {
-            Text(text = "back")
-        }
+    }
+}
+
+@Composable
+fun PreferencesScreenItem(
+    name: String = "Unnamed",
+    content: @Composable () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(text = name)
+        content()
     }
 }

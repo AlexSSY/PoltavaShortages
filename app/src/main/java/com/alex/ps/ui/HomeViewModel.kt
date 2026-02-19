@@ -62,7 +62,7 @@ class HomeViewModel(
 
     val slotsAvailable: StateFlow<Boolean> =
         queueProvider.queueFlow.map { queue ->
-            queue.slots.size == 48
+            queue.slots.size >= 48
         }.stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(1_000),

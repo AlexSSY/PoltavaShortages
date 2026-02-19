@@ -10,11 +10,15 @@ import com.alex.ps.domain.QueueKey
 import com.alex.ps.domain.Settings
 import com.alex.ps.domain.SettingsRepository
 import com.alex.ps.domain.ThemeSetting
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 
 class SettingsRepositoryImpl(
-    private val dataStore: DataStore<Preferences>
+    private val dataStore: DataStore<Preferences>,
+    scope: CoroutineScope
 ): SettingsRepository {
     companion object {
         private val THEME = stringPreferencesKey("theme")
@@ -23,7 +27,7 @@ class SettingsRepositoryImpl(
         private val QUEUE_MINOR = intPreferencesKey("queue_minor")
     }
 
-    override val settingsFlow: Flow<Settings> =
+    override val settingsFlow: StateFlow<Settings> =
         dataStore.data.map { prefs ->
 
             val theme = prefs[THEME]
@@ -45,7 +49,11 @@ class SettingsRepositoryImpl(
                 language = language,
                 selectedQueue = queue
             )
-        }
+        }.stateIn(
+            scope,
+            SharingStarted.WhileSubscribed(1_000),
+            Settings.default()
+        )
 
     override suspend fun setTheme(theme: ThemeSetting) {
         dataStore.edit { it[THEME] = theme.name }
