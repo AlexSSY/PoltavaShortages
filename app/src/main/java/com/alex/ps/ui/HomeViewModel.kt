@@ -116,6 +116,10 @@ class HomeViewModel(
             emptyList()
         )
 
+    /**
+     * Определяет есть ли граффик на завтра, нужен для того чтобы показывать кнопку
+     * граффика на завтра
+     */
     val tomorrowSlotsAvailableFlow: StateFlow<Boolean> =
         combine(
             queueProvider.queueFlow,
