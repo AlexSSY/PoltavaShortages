@@ -1,5 +1,6 @@
 package com.alex.ps.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -33,7 +35,8 @@ fun PreferencesScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         PreferencesScreenItem(name = "Theme") {
             Text(
@@ -69,7 +72,11 @@ fun PreferencesScreenItem(
 ) {
     Row(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .background(
+                color = MaterialTheme.colorScheme.surface,
+                shape = MaterialTheme.shapes.medium
+            ),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
