@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Poltava Shortages</string>
+    <string name="queue_setting">Queue</string>
 </resources>

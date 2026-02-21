@@ -29,6 +29,7 @@ import com.alex.ps.domain.ThemeSetting
 import com.alex.ps.ui.Screen
 import com.alex.ps.ui.HomeScreen
 import com.alex.ps.ui.PreferencesScreen
+import com.alex.ps.ui.ThemeScreen
 import com.alex.ps.ui.TomorrowScheduleScreen
 import com.alex.ps.ui.theme.AppTheme
 import org.koin.android.ext.android.get
@@ -115,8 +116,8 @@ class MainActivity : ComponentActivity() {
 
                         composable(Screen.Preferences.route) {
                             PreferencesScreen(
-                                onBack = {
-                                    navController.navigate(Screen.Main.route)
+                                onThemeClick = {
+                                    navController.navigate(Screen.ThemeScreen.route)
                                 }
                             )
                         }
@@ -125,6 +126,14 @@ class MainActivity : ComponentActivity() {
                             TomorrowScheduleScreen(
                                 onBack = {
                                     navController.navigate(Screen.Main.route)
+                                }
+                            )
+                        }
+
+                        composable(Screen.ThemeScreen.route) {
+                            ThemeScreen(
+                                onThemeSelected = {
+                                    navController.popBackStack()
                                 }
                             )
                         }

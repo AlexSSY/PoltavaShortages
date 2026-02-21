@@ -7,4 +7,5 @@ sealed class Screen(
     data object Main : Screen("main", "Today Schedule")
     data object Preferences : Screen("preferences", "Preferences")
     data object TomorrowSchedule : Screen("tomorrowSchedule", "Tomorrow Schedule")
+    data object ThemeScreen : Screen("theme", "Select Theme")
 }
