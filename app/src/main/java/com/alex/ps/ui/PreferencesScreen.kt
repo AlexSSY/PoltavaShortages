@@ -30,7 +30,8 @@ import org.koin.compose.koinInject
 
 @Composable
 fun PreferencesScreen(
-    onThemeClick: () -> Unit
+    onThemeClick: () -> Unit,
+    onQueueClick: () -> Unit,
 ) {
     val settingsRepository: SettingsRepository = koinInject<SettingsRepository>()
     val currentSettings = settingsRepository.settingsFlow.collectAsState()
