@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextDecoration
@@ -30,7 +31,7 @@ enum class TimePeriodPresentationState{
 class TimePeriodPresentation(
     val start: String,
     val end: String,
-    val duration: String,
+    val duration: Float,
     val state: TimePeriodPresentationState = TimePeriodPresentationState.SOON
 )
 
@@ -101,7 +102,11 @@ fun ElectricityAvailableWidget(
                             color = textColor
                         )
                         Text(
-                            text = period.duration + " " + stringResource(id = R.string.hours),
+                            text = pluralStringResource(
+                                id = R.plurals.hours,
+                                count = period.duration.toInt(),
+                                period.duration
+                            ),
                             style = AppTheme.typography.bodyMedium,
                             fontStyle = FontStyle.Italic,
                             color = textColor

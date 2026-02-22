@@ -5,7 +5,10 @@
     <string name="timer_off">OFF</string>
     <string name="summary">Summary</string>
     <string name="electricity_available_periods">Electricity available periods</string>
-    <string name="hours">hours</string>
+    <plurals name="hours">
+        <item quantity="one">%f hour</item>
+        <item quantity="other">%f hours</item>
+    </plurals>
     <string name="today_schedule">Today Schedule</string>
     <string name="gav">EHS</string>
     <string name="sgav">SEHS</string>
