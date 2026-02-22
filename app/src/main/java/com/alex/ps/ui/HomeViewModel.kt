@@ -3,6 +3,7 @@ package com.alex.ps.ui
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.alex.ps.R
 import com.alex.ps.data.SettingsRepositoryImpl
 import com.alex.ps.domain.Queue
 import com.alex.ps.domain.QueueProvider
@@ -97,16 +98,16 @@ class HomeViewModel(
             emptyList()
         )
 
-    val extraInfoStateFlow: StateFlow<List<String>> =
+    val extraInfoStateFlow: StateFlow<List<Int>> =
         shortagesRepository.shortagesFlow.map { shortages ->
-            val extra = mutableListOf<String>()
+            val extra = mutableListOf<Int>()
 
             if (shortages.isGav) {
-                extra.add("GAV")
+                extra.add(R.string.gav)
             }
 
             if (shortages.isSpecGav) {
-                extra.add("SpecGAV")
+                extra.add(R.string.sgav)
             }
 
             extra
