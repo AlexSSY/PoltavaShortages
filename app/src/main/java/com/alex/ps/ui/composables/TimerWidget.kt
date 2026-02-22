@@ -7,10 +7,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.alex.ps.ui.TimerModel
 import com.alex.ps.ui.theme.AppTheme
+import com.alex.ps.R
 
 @Composable
 fun TimerWidget(
@@ -38,7 +40,10 @@ fun TimerWidget(
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             Text(
-                text = if (timerModel.isOn) "ON" else "OFF",
+                text = if (timerModel.isOn)
+                    stringResource(id = R.string.timer_on)
+                else
+                    stringResource(id = R.string.timer_off),
                 color = if (timerModel.isOn) AppTheme.colorScheme.primary
                     else AppTheme.colorScheme.error,
                 style = AppTheme.typography.titleSmall

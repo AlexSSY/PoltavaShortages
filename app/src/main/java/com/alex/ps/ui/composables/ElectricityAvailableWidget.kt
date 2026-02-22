@@ -14,9 +14,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import com.alex.ps.R
 import com.alex.ps.ui.theme.AppTheme
 
 enum class TimePeriodPresentationState{
@@ -43,7 +45,7 @@ fun ElectricityAvailableWidget(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Electricity available periods",
+            text = stringResource(id = R.string.electricity_available_periods),
             style = AppTheme.typography.titleSmall
         )
         Column(
@@ -99,7 +101,7 @@ fun ElectricityAvailableWidget(
                             color = textColor
                         )
                         Text(
-                            text = period.duration,
+                            text = period.duration + " " + stringResource(id = R.string.hours),
                             style = AppTheme.typography.bodyMedium,
                             fontStyle = FontStyle.Italic,
                             color = textColor

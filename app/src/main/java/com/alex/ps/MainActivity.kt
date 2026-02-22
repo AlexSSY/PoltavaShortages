@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -53,7 +54,7 @@ class MainActivity : ComponentActivity() {
                 Screen.Preferences
             ).find { it.route == currentRoute }
 
-            val title = currentScreen?.title.orEmpty()
+            val titleStringId = currentScreen?.titleStringId ?: R.string.app_name
 
             val canGoBack = navController.previousBackStackEntry != null
 
@@ -72,7 +73,7 @@ class MainActivity : ComponentActivity() {
                         CenterAlignedTopAppBar(
                             title = {
                                 Text(
-                                    text = title,
+                                    text = stringResource(titleStringId),
                                     style = AppTheme.typography.titleMedium
                                 )
                             },

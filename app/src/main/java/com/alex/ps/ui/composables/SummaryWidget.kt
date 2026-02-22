@@ -8,9 +8,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.alex.ps.ui.SummaryModel
 import com.alex.ps.ui.theme.AppTheme
+import com.alex.ps.R
 
 @Composable
 fun SummaryWidget(
@@ -31,7 +33,7 @@ fun SummaryWidget(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            text = "Summary",
+            text = stringResource(id = R.string.summary),
             style = AppTheme.typography.bodyMedium
         )
         Row(

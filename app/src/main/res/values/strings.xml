@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">Poltava Shortages</string>
     <string name="queue_setting">Queue</string>
+    <string name="timer_on">ON</string>
+    <string name="timer_off">OFF</string>
+    <string name="summary">Summary</string>
+    <string name="electricity_available_periods">Electricity available periods</string>
+    <string name="hours">hours</string>
+    <string name="today_schedule">Today Schedule</string>
 </resources>

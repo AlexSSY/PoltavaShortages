@@ -1,13 +1,15 @@
 package com.alex.ps.ui
 
+import com.alex.ps.R
+
 sealed class Screen(
     val route: String,
-    val title: String
+    val titleStringId: Int
 ) {
-    data object Main : Screen("main", "Today Schedule")
-    data object Preferences : Screen("preferences", "Preferences")
-    data object TomorrowSchedule : Screen("tomorrowSchedule", "Tomorrow Schedule")
-    data object ThemeScreen : Screen("theme", "Select Theme")
-    data object QueueScreen : Screen("queue", "Select Queue")
-    data object LanguageScreen : Screen("language", "Select Language")
+    data object Main : Screen("main", R.string.today_schedule)
+    data object Preferences : Screen("preferences", R.string.today_schedule)
+    data object TomorrowSchedule : Screen("tomorrowSchedule", R.string.today_schedule)
+    data object ThemeScreen : Screen("theme", R.string.today_schedule)
+    data object QueueScreen : Screen("queue", R.string.today_schedule)
+    data object LanguageScreen : Screen("language", R.string.today_schedule)
 }

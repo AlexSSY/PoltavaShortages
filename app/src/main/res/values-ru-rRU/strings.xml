@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="queue_setting">Очередь</string>
+    <string name="timer_on">ВКЛ</string>
+    <string name="timer_off">ВЫКЛ</string>
+    <string name="summary">Итоги</string>
+    <string name="electricity_available_periods">Периоды со светом</string>
+    <string name="hours">часа</string>
+    <string name="today_schedule">Сегодняшний График</string>
+</resources>

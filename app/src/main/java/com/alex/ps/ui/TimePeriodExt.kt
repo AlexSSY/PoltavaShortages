@@ -19,7 +19,7 @@ fun List<TimePeriod>.toPresentation(nowTime: LocalDateTime): List<TimePeriodPres
         TimePeriodPresentation(
             start = formatTime(timePeriod.start.hour, timePeriod.start.minute),
             end = formatTime(timePeriod.end.hour, timePeriod.end.minute),
-            duration = "${timePeriod.durationInMinutes / 60F} hours",
+            duration = "${timePeriod.durationInMinutes / 60F}",
             state = state
         )
     }
