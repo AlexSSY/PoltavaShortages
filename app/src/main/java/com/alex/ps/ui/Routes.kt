@@ -9,4 +9,5 @@ sealed class Screen(
     data object TomorrowSchedule : Screen("tomorrowSchedule", "Tomorrow Schedule")
     data object ThemeScreen : Screen("theme", "Select Theme")
     data object QueueScreen : Screen("queue", "Select Queue")
+    data object LanguageScreen : Screen("language", "Select Language")
 }

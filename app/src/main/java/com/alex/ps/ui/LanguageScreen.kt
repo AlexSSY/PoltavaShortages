@@ -17,15 +17,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import com.alex.ps.domain.LanguageSetting
 import com.alex.ps.domain.SettingsRepository
-import com.alex.ps.domain.ThemeSetting
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 
 @Composable
-fun ThemeScreen(
+fun LanguageScreen(
     modifier: Modifier = Modifier,
-    onThemeSelected: () -> Unit
+    onLanguageSelected: () -> Unit
 ) {
     val settingsRepository: SettingsRepository = koinInject<SettingsRepository>()
     val currentSettings = settingsRepository.settingsFlow.collectAsState()
@@ -38,9 +38,9 @@ fun ThemeScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        ThemeSetting.entries.forEach { entry ->
+        LanguageSetting.entries.forEach { entry ->
             val bgColor = if (
-                entry == currentSettings.value.theme
+                entry == currentSettings.value.language
             )
                 MaterialTheme.colorScheme.primary
             else
@@ -57,8 +57,8 @@ fun ThemeScreen(
                     .clickable(
                         onClick = {
                             scope.launch {
-                                settingsRepository.setTheme(entry)
-                                onThemeSelected()
+                                settingsRepository.setLanguage(entry)
+                                onLanguageSelected()
                             }
                         }
                     )

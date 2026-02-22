@@ -28,6 +28,7 @@ import com.alex.ps.domain.SettingsRepository
 import com.alex.ps.domain.ThemeSetting
 import com.alex.ps.ui.Screen
 import com.alex.ps.ui.HomeScreen
+import com.alex.ps.ui.LanguageScreen
 import com.alex.ps.ui.PreferencesScreen
 import com.alex.ps.ui.QueueScreen
 import com.alex.ps.ui.ThemeScreen
@@ -122,6 +123,9 @@ class MainActivity : ComponentActivity() {
                                 },
                                 onQueueClick = {
                                     navController.navigate(Screen.QueueScreen.route)
+                                },
+                                onLanguageClick = {
+                                    navController.navigate(Screen.LanguageScreen.route)
                                 }
                             )
                         }
@@ -144,6 +148,14 @@ class MainActivity : ComponentActivity() {
 
                         composable(Screen.QueueScreen.route) {
                             QueueScreen(
+                                onLanguageSelected = {
+                                    navController.popBackStack()
+                                }
+                            )
+                        }
+
+                        composable(Screen.LanguageScreen.route) {
+                            LanguageScreen(
                                 onLanguageSelected = {
                                     navController.popBackStack()
                                 }

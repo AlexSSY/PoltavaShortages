@@ -32,6 +32,7 @@ import org.koin.compose.koinInject
 fun PreferencesScreen(
     onThemeClick: () -> Unit,
     onQueueClick: () -> Unit,
+    onLanguageClick: () -> Unit
 ) {
     val settingsRepository: SettingsRepository = koinInject<SettingsRepository>()
     val currentSettings = settingsRepository.settingsFlow.collectAsState()
@@ -54,12 +55,12 @@ fun PreferencesScreen(
                 currentSettings.value.selectedQueue.major,
                 currentSettings.value.selectedQueue.minor
             ),
-            onClick = {}
+            onClick = onQueueClick
         )
         PreferencesScreenItem(
             name = "Language",
             value = currentSettings.value.language.name,
-            onClick = {}
+            onClick = onLanguageClick
         )
     }
 }
