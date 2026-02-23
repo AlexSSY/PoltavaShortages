@@ -21,6 +21,8 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.alex.ps.R
 import com.alex.ps.ui.theme.AppTheme
+import java.text.DecimalFormat
+import kotlin.math.round
 
 enum class TimePeriodPresentationState{
     SOON,
@@ -101,11 +103,14 @@ fun ElectricityAvailableWidget(
                             style = AppTheme.typography.bodyMedium,
                             color = textColor
                         )
+                        val hours = round(period.duration)
+                        val formatter = DecimalFormat("#.##")
+
                         Text(
                             text = pluralStringResource(
                                 id = R.plurals.hours,
-                                count = period.duration.toInt(),
-                                period.duration
+                                count = hours.toInt(),
+                                formatter.format(period.duration)
                             ),
                             style = AppTheme.typography.bodyMedium,
                             fontStyle = FontStyle.Italic,

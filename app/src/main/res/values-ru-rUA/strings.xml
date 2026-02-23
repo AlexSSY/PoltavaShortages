@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Полтава Відключення</string>
+    <string name="queue_setting">Черга</string>
+    <string name="timer_on">ВВІМК</string>
+    <string name="timer_off">ВИМК</string>
+    <string name="summary">Взагалі</string>
+    <string name="electricity_available_periods">Періоди зі світлом</string>
+    <plurals name="hours">
+        <item quantity="one">%s година</item>
+        <item quantity="other">%s години</item>
+        <item quantity="few">%s години</item>
+        <item quantity="many">%s години</item>
+    </plurals>
+    <string name="today_schedule">Графік на сьогодні</string>
+    <string name="gav">ГАВ</string>
+    <string name="sgav">СГАВ</string>
+</resources>

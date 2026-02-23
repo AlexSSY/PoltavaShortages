@@ -7,10 +7,10 @@
     <string name="summary">Итого</string>
     <string name="electricity_available_periods">Периоды со светом</string>
     <plurals name="hours">
-        <item quantity="one">%f час</item>
-        <item quantity="other">%f часа</item>
-        <item quantity="few">%f часов</item>
-        <item quantity="many">%f часов</item>
+        <item quantity="one">%s час</item>
+        <item quantity="other">%s час</item>
+        <item quantity="few">%s часов</item>
+        <item quantity="many">%s часов</item>
     </plurals>
     <string name="today_schedule">Сегодняшний График</string>
     <string name="gav">ГАО</string>
