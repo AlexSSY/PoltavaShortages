@@ -6,6 +6,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.net.SocketTimeoutException
@@ -23,8 +24,8 @@ class PoeShortagesDataSource(
         val gavHtml = downloadUrl(SLOTS_URL)
 
         val unloadingList = unloadingToDataClassList(unloadingJson)
-        val isGav = unloadingList.any { it.unloadingtypename == "ГАВ" }
-        val isSpecGav = unloadingList.any { it.unloadingtypename == "СГАВ" }
+        val isGav = unloadingList.any { it.unloadingTypeName == "ГАВ" }
+        val isSpecGav = unloadingList.any { it.unloadingTypeName == "СГАВ" }
 
         val queues = queueListParser.parse(gavHtml)
 
@@ -32,8 +33,9 @@ class PoeShortagesDataSource(
     }
 
     private fun unloadingToDataClassList(unloadingJson: String): List<Unloading> {
-        val listType = object : TypeToken<List<Unloading>>() {}.type
-        return Gson().fromJson(unloadingJson, listType)
+//        val listType = object : TypeToken<List<Unloading>>() {}.type
+//        return Gson().fromJson(unloadingJson, listType)
+        return Json.decodeFromString<List<Unloading>>(unloadingJson)
     }
 
     private fun downloadUrl(url: String): String {
