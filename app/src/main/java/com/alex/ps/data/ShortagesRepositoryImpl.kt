@@ -22,7 +22,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 
 /**
- * Хранилище которое использует DataStore под капотом
+ * Хранилище которое использует DataStore для хранения
  */
 class ShortagesRepositoryImpl(
     val shortagesDataSource: ShortagesDataSource,

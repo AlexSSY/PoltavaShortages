@@ -9,6 +9,9 @@ import com.google.gson.JsonSerializer
 import java.lang.reflect.Type
 import java.time.LocalDateTime
 
+/**
+ * Нужен для сериализации LocalDateTime в JSON
+ */
 class LocalDateTimeAdapter : JsonSerializer<LocalDateTime>,
     JsonDeserializer<LocalDateTime> {
 
