@@ -2,6 +2,8 @@ package com.alex.ps.data
 
 import com.alex.ps.domain.Shortages
 import com.alex.ps.domain.ShortagesDataSource
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
@@ -17,14 +19,21 @@ class PoeShortagesDataSource(
     }
 
     override suspend fun getShortages(): Shortages = withContext(Dispatchers.IO) {
-        val rawExtra = downloadUrl(GAV_URL)
+        val unloadingJson = downloadUrl(GAV_URL)
         val gavHtml = downloadUrl(SLOTS_URL)
 
-        val isGav = rawExtra.contains("ГАВ")
-        val isSpecGav = rawExtra.contains("СГАВ")
+        val unloadingList = unloadingToDataClassList(unloadingJson)
+        val isGav = unloadingList.any { it.unloadingtypename == "ГАВ" }
+        val isSpecGav = unloadingList.any { it.unloadingtypename == "СГАВ" }
+
         val queues = queueListParser.parse(gavHtml)
 
         Shortages(isGav, isSpecGav, queues)
+    }
+
+    private fun unloadingToDataClassList(unloadingJson: String): List<Unloading> {
+        val listType = object : TypeToken<List<Unloading>>() {}.type
+        return Gson().fromJson(unloadingJson, listType)
     }
 
     private fun downloadUrl(url: String): String {
